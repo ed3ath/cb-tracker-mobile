@@ -1,0 +1,7 @@
+{
+  "name": "CryptoBlades Tracker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
