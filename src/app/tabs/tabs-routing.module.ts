@@ -16,6 +16,14 @@ const routes: Routes = [
         loadChildren: () => import('../pages/account/account.module').then(m => m.AccountPageModule)
       },
       {
+        path: 'treasury',
+        loadChildren: () => import('../pages/treasury/treasury.module').then(m => m.TreasuryPageModule)
+      },
+      {
+        path: 'options',
+        loadChildren: () => import('../pages/options/options.module').then(m => m.OptionsPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/dashboard',
         pathMatch: 'full'

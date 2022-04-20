@@ -1,17 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Dashboard
+      Treasury
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card>
+  <ion-card *ngFor="let partner of _partners;">
     <ion-card-header>
-      <ion-card-subtitle>Current SKILL Price</ion-card-subtitle>
+      <ion-card-subtitle>{{partner.name}}</ion-card-subtitle>
       <ion-card-title>
-        {{_skillPrice}}
+        x{{partner.multiplier}}
+        <span class="text-muted alt-text"> (${{partner.price}}) </span>
       </ion-card-title>
     </ion-card-header>
   </ion-card>

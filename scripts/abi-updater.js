@@ -7,7 +7,8 @@ const ABIS = [
   'IERC20',
   'Characters',
   'Weapons',
-  'SimpleQuests'
+  'SimpleQuests',
+  'Treasury'
 ];
 
 async function updateMainAbi() {
