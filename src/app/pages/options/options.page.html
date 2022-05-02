@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Options
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label>Network</ion-label>
+    <ion-select placeholder="Select Network" value="BNB">
+      <ion-select-option value="BNB">Binance</ion-select-option>
+      <ion-select-option value="HECO">HECO Chain</ion-select-option>
+      <ion-select-option value="OEC">OKEx Chain</ion-select-option>
+      <ion-select-option value="POLYGON">Polygon</ion-select-option>
+      <ion-select-option value="AVAX">Avalanche</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Currency</ion-label>
+    <ion-select placeholder="Select Currency" value="usd">
+      <ion-select-option value="usd">USD</ion-select-option>
+      <ion-select-option value="gbp">GBP</ion-select-option>
+      <ion-select-option value="eur">EUR</ion-select-option>
+      <ion-select-option value="php">PHP</ion-select-option>
+      <ion-select-option value="aud">AUD</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Privacy</ion-label>
+    <ion-toggle checked="true"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Notifications</ion-label>
+    <ion-toggle checked="true"></ion-toggle>
+  </ion-item>
+</ion-content>
