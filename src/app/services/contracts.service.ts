@@ -34,9 +34,8 @@ export class ContractService {
       multicall: multiCallAbi,
     };
 
-    await this._config.init();
-
     const rpc = this._config.get('rpcUrls');
+
     this._web3 = new Web3(rpc[0]);
 
     const cryptoblades = new this._web3.eth.Contract(

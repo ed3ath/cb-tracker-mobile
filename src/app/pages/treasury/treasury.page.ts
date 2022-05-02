@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContractService } from 'src/app/services/contracts.service';
 import utils from 'web3-utils';
 import axios from 'axios';
@@ -8,15 +8,11 @@ import axios from 'axios';
   templateUrl: 'treasury.page.html',
   styleUrls: ['treasury.page.scss'],
 })
-export class TreasuryPage {
+export class TreasuryPage implements OnInit {
   _partners;
-  constructor(private _contracts: ContractService) {
-    this.init();
-  }
+  constructor(private _contracts: ContractService) {}
 
-  async init() {
-    await this._contracts.init();
-
+  async ngOnInit() {
     const treasury = this._contracts.getContract('treasury');
     const partnerIds = await treasury.methods
       .getActivePartnerProjectsIds()
