@@ -30,4 +30,10 @@ export class DashboardPage implements OnInit {
     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public mainLogo = '../../assets/cbt-logo.svg';
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public burgerMenu = '../../assets/burger-menu.svg';
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public headerBg = '../../assets/dungeon.jpg';
 }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <g id="hide" transform="translate(-400 -98)">
+    <g id="Rectangle_3" data-name="Rectangle 3" transform="translate(400 98)" fill="none" stroke="#edcd90" stroke-width="2">
+      <path d="M9,0H52a8,8,0,0,1,8,8V52a8,8,0,0,1-8,8H8a8,8,0,0,1-8-8V9A9,9,0,0,1,9,0Z" stroke="none"/>
+      <path d="M9,1H52a7,7,0,0,1,7,7V52a7,7,0,0,1-7,7H8a7,7,0,0,1-7-7V9A8,8,0,0,1,9,1Z" fill="none"/>
+    </g>
+    <line id="Line_1" data-name="Line 1" x2="43.471" transform="translate(409.029 128.143)" fill="none" stroke="#edcd90" stroke-linecap="round" stroke-width="2"/>
+  </g>
+</svg>
