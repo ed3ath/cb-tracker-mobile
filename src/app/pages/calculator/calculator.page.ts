@@ -4,11 +4,11 @@ import utils from 'web3-utils';
 import axios from 'axios';
 
 @Component({
-  selector: 'app-treasury',
-  templateUrl: 'treasury.page.html',
-  styleUrls: ['treasury.page.scss'],
+  selector: 'app-calculator',
+  templateUrl: 'calculator.page.html',
+  styleUrls: ['calculator.page.scss'],
 })
-export class TreasuryPage implements OnInit {
+export class CalculatorPage implements OnInit {
   _partners;
   public dummyData = [
     { id: 7, minSkill: '0.12341', maxSkill: '0.31396', minExp: '544',maxExp: '6943' },

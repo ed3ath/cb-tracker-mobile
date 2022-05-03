@@ -20,5 +20,6 @@ export class AppComponent implements OnInit {
     await this._storage.create();
     await this._config.init();
     await this._contract.init();
+    console.log('Loaded services...');
   }
 }

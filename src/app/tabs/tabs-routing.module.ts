@@ -8,6 +8,10 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'splash',
+        loadChildren: () => import('../pages/splash/splash.module').then(m => m.SplashPageModule)
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
@@ -16,8 +20,8 @@ const routes: Routes = [
         loadChildren: () => import('../pages/account/account.module').then(m => m.AccountPageModule)
       },
       {
-        path: 'treasury',
-        loadChildren: () => import('../pages/treasury/treasury.module').then(m => m.TreasuryPageModule)
+        path: 'calculator',
+        loadChildren: () => import('../pages/calculator/calculator.module').then(m => m.CalculatorPageModule)
       },
       {
         path: 'stats',
@@ -29,14 +33,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/dashboard',
+        redirectTo: '/tabs/splash',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/dashboard',
+    redirectTo: '/tabs/splash',
     pathMatch: 'full'
   }
 ];
