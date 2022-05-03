@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AccountPage } from './account.page';
 
 import { AccountPageRoutingModule } from './account-routing.module';
+import { ModalComponent } from 'src/app/modal/modal.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { AccountPageRoutingModule } from './account-routing.module';
     FormsModule,
     AccountPageRoutingModule
   ],
-  declarations: [AccountPage]
+  declarations: [AccountPage, ModalComponent],
+  entryComponents: [ModalComponent]
 })
 export class AccountPageModule {}

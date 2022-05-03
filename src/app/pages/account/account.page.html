@@ -1,10 +1,408 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="false">
   <ion-toolbar>
-    <ion-title>
-      Account
-    </ion-title>
+    <ion-img id="cbt-logo" [src]="mainLogo"></ion-img>
+    <span class="bsc-logo" slot="end"></span>
+    <ion-buttons slot="end">
+      <ion-menu-button>
+        <ion-icon [src]="burgerMenu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<ion-header id="header-inner" [translucent]="true" slot="start">
+  <ion-toolbar id="content-header">
+    <h2>ACCOUNTS</h2>
+    <ion-img id="cbt-logo" [src]="headerBg"></ion-img>
+  </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true">
+  <div id="container">
+    <ion-grid id="accounts">
+      <ion-row id="btn-account">
+        <ion-col size="4">
+          <button (click)="openModalAddAccount()">Add Account</button>
+        </ion-col>
+        <ion-col size="4">
+          <button>Import</button>
+        </ion-col>
+        <ion-col size="4">
+          <button>Export</button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-accordion-group>
+            <!-- add unique identifier in the accordion value to trigger accordions separately -->
+            <ion-accordion value="colors1" toggle-icon-slot="start" toggle-icon="../../assets/accounts/arrow.svg">
+              <ion-item slot="header">
+                <ion-label>1-Fire-BNB</ion-label>
+                <div>
+                  <ion-icon src="../../../assets/accounts/checkbox.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/sword.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/trash.svg"></ion-icon>
+                </div>
+              </ion-item>
+              <ion-list slot="content">
+                <ion-item>
+                  <ion-row id="content-account">
+                    <ion-col size="6">
+                      <div>
+                        <span>Address</span>
+                        <h3>0x2B...61cB</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>BNB Balance</span>
+                        <h3>0.204631 ($1.93)</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Unclaimed</span>
+                        <h3>139.121 ($50.45)</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Claimable</span>
+                        <h3>2.20031 ($1.06)</h3>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-row id="characters-account">
+
+                    <!-- you can loop here -->
+                    <ion-col size="12" class="card-wrapper">
+                      <ion-row id="inner-wrap">
+                        <ion-col size="4">
+                          <ion-img src="../../../assets/accounts/knight.png"></ion-img>
+                        </ion-col>
+                        <ion-col size="8">
+                          <h5>Frinilex Sanpelin</h5>
+                          <ion-row class="ion-justify-content-start">
+                            <ion-col size="1">
+                              <span class="fire"></span>
+                            </ion-col>
+                            <ion-col size="11" id="lvl">
+                              <span>LVL:62 / Rank: Peasant</span>
+                            </ion-col>
+                          </ion-row>
+                          <div>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character power -->
+                                  <div [style.width]="'90%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Target Level 71</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>(8,213 xp left)</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character xp progress -->
+                                  <div [style.width]="'100%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character stamina -->
+                                  <div [style.width]="'40%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>ID#: 12390410</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+
+                    <ion-col size="12" class="card-wrapper">
+                      <ion-row id="inner-wrap">
+                        <ion-col size="4">
+                          <ion-img src="../../../assets/accounts/knight.png"></ion-img>
+                        </ion-col>
+                        <ion-col size="8">
+                          <h5>Frinilex Sanpelin</h5>
+                          <ion-row class="ion-justify-content-start">
+                            <ion-col size="1">
+                              <span class="fire"></span>
+                            </ion-col>
+                            <ion-col size="11" id="lvl">
+                              <span>LVL:62 / Rank: Peasant</span>
+                            </ion-col>
+                          </ion-row>
+                          <div>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character power -->
+                                  <div [style.width]="'90%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Target Level 71</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>(8,213 xp left)</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character xp progress -->
+                                  <div [style.width]="'100%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character stamina -->
+                                  <div [style.width]="'40%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>ID#: 12390410</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+
+                  </ion-row >
+                </ion-item>
+                <ion-item id="staked-details">
+                  <ion-row>
+                    <ion-col size="12">
+                      <p><span>Staked:</span> 0.00000</p>
+                      <p><span>Wallet:</span> 0.03141 ($1.06)</p>
+                      <p><span>Total:</span> 5.1099 ($5.120)</p>
+                    </ion-col>
+                    <ion-col size="12">
+                      <p id="view-less" (click)="closeAccordion()">View Less Info</p>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+            <ion-accordion value="colors2" toggle-icon-slot="start" toggle-icon="../../assets/accounts/arrow.svg">
+              <ion-item slot="header">
+                <ion-label>1-Fire-BNB</ion-label>
+                <div>
+                  <ion-icon src="../../../assets/accounts/checkbox.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/sword.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon>
+                  <ion-icon src="../../../assets/accounts/trash.svg"></ion-icon>
+                </div>
+              </ion-item>
+              <ion-list slot="content">
+                <ion-item>
+                  <ion-row id="content-account">
+                    <ion-col size="6">
+                      <div>
+                        <span>Address</span>
+                        <h3>0x2B...61cB</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>BNB Balance</span>
+                        <h3>0.204631 ($1.93)</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Unclaimed</span>
+                        <h3>139.121 ($50.45)</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Claimable</span>
+                        <h3>2.20031 ($1.06)</h3>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+                <ion-item>
+                  <ion-row id="characters-account">
+                    <ion-col size="12" class="card-wrapper">
+                      <ion-row id="inner-wrap">
+                        <ion-col size="4">
+                          <ion-img src="../../../assets/accounts/knight.png"></ion-img>
+                        </ion-col>
+                        <ion-col size="8">
+                          <h5>Frinilex Sanpelin</h5>
+                          <ion-row class="ion-justify-content-start">
+                            <ion-col size="1">
+                              <span class="fire"></span>
+                            </ion-col>
+                            <ion-col size="11" id="lvl">
+                              <span>LVL:62 / Rank: Peasant</span>
+                            </ion-col>
+                          </ion-row>
+                          <div>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character power -->
+                                  <div [style.width]="'90%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Target Level 71</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>(8,213 xp left)</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character xp progress -->
+                                  <div [style.width]="'100%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>46,080 / 45,080</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character stamina -->
+                                  <div [style.width]="'40%'"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>ID#: 12390410</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row >
+                </ion-item>
+                <ion-item id="staked-details">
+                  <ion-row>
+                    <ion-col size="12">
+                      <p><span>Staked:</span> 0.00000</p>
+                      <p><span>Wallet:</span> 0.03141 ($1.06)</p>
+                      <p><span>Total:</span> 5.1099 ($5.120)</p>
+                    </ion-col>
+                    <ion-col size="12">
+                      <p id="view-less" (click)="closeAccordion()">View Less Info</p>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

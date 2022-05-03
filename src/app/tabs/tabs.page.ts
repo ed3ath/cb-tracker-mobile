@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -6,7 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+  activeTab = '';
 
-  constructor() {}
+  constructor(private router: Router) { }
 
+  gotoDashBoard(){
+    this.router.navigate(['tabs/dashboard']);
+  }
+
+  selectedTab(tab){
+    this.activeTab = tab;
+    console.log(this.activeTab);
+  }
 }
