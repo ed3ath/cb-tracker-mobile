@@ -51,10 +51,11 @@ export class DashboardPage implements OnInit {
   async ticker() {
     await this._contracts.skillPriceTicker();
 
-    const accounts = (await this._storage.get('accounts')) || [];
+    const accounts = await this._storage.get('accounts') || [];
     const skillPartnerId = await this._contracts.getSkillPartnerId();
     const skillAssets = await this._contracts.getSkillAssets(accounts);
 
+    this._chain = await this._contracts.getChain();
     this._skillPrice = this._utils.currencyFormat(this._contracts._skillPrice);
     this._gasPrice = this._utils.currencyFormat(this._contracts._gasPrice);
     this._gasBalances = await Promise.all(

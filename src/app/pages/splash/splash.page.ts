@@ -15,8 +15,8 @@ export class SplashPage implements OnInit {
   }
 
   async checkContractInit() {
-    if (!this._contracts.isInit) {
-      return await this.checkContractInit();
+    if (!this._contracts._isInit) {
+      setTimeout(() => this.checkContractInit(), 1000);
     } else {
       console.log('navigating to dashboard');
       setTimeout(() => this.router.navigate(['/tabs/dashboard']), 3000);

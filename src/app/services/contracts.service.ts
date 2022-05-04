@@ -26,7 +26,7 @@ import skillStaking180Abi from '../../data/abi/SkillStakingRewardsUpgradeable180
   providedIn: 'root',
 })
 export class ContractService {
-  isInit: boolean;
+  _isInit: boolean;
   _skillPrice: number;
   _gasPrice: number;
   private _web3: any;
@@ -38,11 +38,10 @@ export class ContractService {
     private _config: ConfigService,
     private _utils: UtilsService
   ) {
-    this.isInit = false;
+    this._isInit = false;
   }
 
   async init() {
-    this.isInit = true;
     this._abis = {
       cryptoblades: cryptoBladesAbi,
       skill: erc20Abi,
@@ -112,6 +111,7 @@ export class ContractService {
       skillStaking90,
       skillStaking180,
     };
+    this._isInit = true;
   }
 
   setContract(abi: any, address: string) {
@@ -202,7 +202,11 @@ export class ContractService {
       gasPrice *= 1000000000000;
       skillPrice *= 1000000000000;
     }
-    this._skillPrice = skillPrice * gasPrice;
+    if (chain === 'BNB') {
+      this._skillPrice = skillPrice * gasPrice;
+    } else {
+      this._skillPrice = skillPrice;
+    }
     this._gasPrice = gasPrice;
   }
 
@@ -272,33 +276,159 @@ export class ContractService {
       );
     }
     return {
-      staked: staked.map(i => this._utils.fromEther(i)),
-      unclaimed: unclaimed.map(i => this._utils.fromEther(i)),
-      wallet: wallet.map(i => this._utils.fromEther(i)),
+      staked: staked.map((i) => this._utils.fromEther(i)),
+      unclaimed: unclaimed.map((i) => this._utils.fromEther(i)),
+      wallet: wallet.map((i) => this._utils.fromEther(i)),
     };
   }
 
   async getSkillPartnerId() {
-    const activePartnerIds = await this.getContract('treasury').methods.getActivePartnerProjectsIds().call();
+    const activePartnerIds = await this.getContract('treasury')
+      .methods.getActivePartnerProjectsIds()
+      .call();
 
-    const skillPartner =  (await this.multicall(
-      this.getCallData(
-        treasuryAbi,
-        this._config.get('VUE_APP_TREASURY_CONTRACT_ADDRESS'),
-        'partneredProjects',
-        activePartnerIds.map(id => [id])
-      ))).find((data) => data[2] === 'SKILL');
+    const skillPartner = (
+      await this.multicall(
+        this.getCallData(
+          treasuryAbi,
+          this._config.get('VUE_APP_TREASURY_CONTRACT_ADDRESS'),
+          'partneredProjects',
+          activePartnerIds.map((id) => [id])
+        )
+      )
+    ).find((data) => data[2] === 'SKILL');
 
     return skillPartner ? BigInt(skillPartner[0]).toString() : false;
-}
+  }
 
   async getMultiplier(id) {
-    const multiplier = await this.getContract('treasury').methods.getProjectMultiplier(id).call();
+    const multiplier = await this.getContract('treasury')
+      .methods.getProjectMultiplier(id)
+      .call();
     return Number(this._utils.fromEther(multiplier));
   }
 
   async getGasBalance(address) {
     const balance = await this._web3.eth.getBalance(address);
     return this._utils.fromEther(balance);
+  }
+
+  async getAccountCharacters(address) {
+    const contract = this.getContract('characters');
+    const len = parseInt(await contract.methods.balanceOf(address).call(), 10);
+    const characters = await Promise.all(
+      [...Array(len).keys()].map((_, i) =>
+        contract.methods.tokenOfOwnerByIndex(address, i).call()
+      )
+    );
+    return characters;
+  }
+
+  async getAccountWeapons(address) {
+    const contract = this.getContract('weapons');
+    const len = parseInt(await contract.methods.balanceOf(address).call(), 10);
+    const weapons = await Promise.all(
+      [...Array(len).keys()].map((_, i) =>
+        contract.methods.tokenOfOwnerByIndex(address, i).call()
+      )
+    );
+    return weapons;
+  }
+
+  async getCharactersData(charIds) {
+    const chain = await this.getChain();
+    const charactersAddress = await this.getContract('cryptoblades')
+      .methods.characters()
+      .call();
+    const charsData = (
+      await this.multicall(
+        this.getCallData(
+          charactersAbi,
+          charactersAddress,
+          'get',
+          charIds.map((charId) => [charId])
+        )
+      )
+    ).map((data, i) => this._utils.characterFromContract(charIds[i], data));
+    const charsSta = (
+      await this.multicall(
+        this.getCallData(
+          charactersAbi,
+          charactersAddress,
+          'getStaminaPoints',
+          charIds.map((charId) => [charId])
+        )
+      )
+    ).map((sta) => sta[0]);
+    const charsPower = await this.multicall(
+      this.getCallData(
+        charactersAbi,
+        charactersAddress,
+        'getTotalPower',
+        charIds.map((charId) => [charId])
+      )
+    );
+    const charsRep = (chain !== 'AVAX' ? await this.multicall(
+      this.getCallData(
+        questAbi,
+        this._config.get('VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS'),
+        'getCharacterQuestData',
+        charIds.map(charId => [charId])
+      )
+    ) : []);
+    const charsExp = await this.getContract('cryptoblades').methods.getXpRewards(charIds).call();
+
+    return {
+      charsData,
+      charsSta,
+      charsPower,
+      charsRep,
+      charsExp
+    };
+  }
+
+  async getReputationLevelRequirements() {
+    const conQuest = this.getContract('quest');
+    const VAR_REPUTATION_LEVEL_2 = await conQuest.methods
+      .VAR_REPUTATION_LEVEL_2()
+      .call();
+    const VAR_REPUTATION_LEVEL_3 = await conQuest.methods
+      .VAR_REPUTATION_LEVEL_3()
+      .call();
+    const VAR_REPUTATION_LEVEL_4 = await conQuest.methods
+      .VAR_REPUTATION_LEVEL_4()
+      .call();
+    const VAR_REPUTATION_LEVEL_5 = await conQuest.methods
+      .VAR_REPUTATION_LEVEL_5()
+      .call();
+    const requirementsRaw = await conQuest.methods
+      .getVars([
+        VAR_REPUTATION_LEVEL_2,
+        VAR_REPUTATION_LEVEL_3,
+        VAR_REPUTATION_LEVEL_4,
+        VAR_REPUTATION_LEVEL_5,
+      ])
+      .call();
+
+    return {
+      level2: +requirementsRaw[0],
+      level3: +requirementsRaw[1],
+      level4: +requirementsRaw[2],
+      level5: +requirementsRaw[3],
+    };
+  }
+
+  getReputationTier(reputation, reputationLevelRequirements) {
+    if (Number(reputation) < reputationLevelRequirements.level2) {
+      return this._utils.ReputationTier.PEASANT;
+    } else if (reputation < reputationLevelRequirements.level3) {
+      return this._utils.ReputationTier.TRADESMAN;
+    } else if (reputation < reputationLevelRequirements.level4) {
+      return this._utils.ReputationTier.NOBLE;
+    } else if (reputation < reputationLevelRequirements.level5) {
+      return this._utils.ReputationTier.KNIGHT;
+    } else {
+      return this._utils.ReputationTier.KING;
+    }
   }
 }

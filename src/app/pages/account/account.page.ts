@@ -26,8 +26,11 @@ export class AccountPage implements OnInit {
   _multiplier: number;
   _accounts: any;
   _names: any;
+  _charIds: any;
   _characters: any;
+  _gasName: string;
   _isDestroyed: boolean;
+  _repRequirements: any;
 
   constructor(
     private modalCtrl: ModalController,
@@ -40,6 +43,9 @@ export class AccountPage implements OnInit {
     this._isDestroyed = false;
     this._names = (await this._storage.get('names')) || {};
     this._accounts = (await this._storage.get('accounts')) || [];
+    if (this._chain !== 'AVAX') {
+      this._repRequirements = await this._contracts.getReputationLevelRequirements();
+    }
     await this.ticker();
   }
 
@@ -60,30 +66,68 @@ export class AccountPage implements OnInit {
   }
 
   async ticker() {
-    const skillPartnerId = await this._contracts.getSkillPartnerId();
-    const skillAssets = await this._contracts.getSkillAssets(this._accounts);
+    if (this._contracts._isInit) {
 
-    await this._contracts.skillPriceTicker();
-    this._names = (await this._storage.get('names')) || {};
-    this._accounts = (await this._storage.get('accounts')) || [];
+      this._chain = await this._contracts.getChain();
+      this._names = (await this._storage.get('names')) || {};
+      this._accounts = (await this._storage.get('accounts')) || [];
+      this._gasName = this._utils.getGasName(this._chain);
 
-    this._skillPrice = this._utils.currencyFormat(this._contracts._skillPrice);
-    this._gasPrice = this._utils.currencyFormat(this._contracts._gasPrice);
-    this._gasBalances = await Promise.all(
-      this._accounts.map(async (acc) => await this._contracts.getGasBalance(acc))
-    );
-    this._multiplier = skillPartnerId
-      ? Number(await this._contracts.getMultiplier(skillPartnerId))
-      : 0;
-    this._skillAssets = {
-      staked: skillAssets.staked.map((i) => this._utils.formatNumber(i)),
-      unclaimed: skillAssets.unclaimed.map((i) => this._utils.formatNumber(i)),
-      wallet: skillAssets.wallet.map((i) => this._utils.formatNumber(i)),
-      claimable: skillAssets.unclaimed.map((i) => this._utils.formatNumber(Number(i) * this._multiplier))
-    };
-    console.log(this._skillAssets);;
+      const skillPartnerId = await this._contracts.getSkillPartnerId();
+      const skillAssets = await this._contracts.getSkillAssets(this._accounts);
+      this._charIds = await Promise.all(
+        this._accounts.map(
+          async (acc) => await this._contracts.getAccountCharacters(acc)
+        )
+      );
+
+      await this._contracts.skillPriceTicker();
+      this._skillPrice = this._contracts._skillPrice;
+      this._gasPrice = this._contracts._gasPrice;
+      this._gasBalances = await Promise.all(
+        this._accounts.map(
+          async (acc) => await this._contracts.getGasBalance(acc)
+        )
+      );
+
+      this._multiplier = skillPartnerId
+        ? Number(await this._contracts.getMultiplier(skillPartnerId))
+        : 0;
+      this._skillAssets = {
+        staked: skillAssets.staked,
+        unclaimed: skillAssets.unclaimed,
+        wallet: skillAssets.wallet,
+        claimable: skillAssets.unclaimed.map(
+          (i) => Number(i) * this._multiplier
+        ),
+      };
+      this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
+      console.log(this._charIds, this._characters);
+    }
     if (!this._isDestroyed) {
       setTimeout(() => this.ticker(), 5000);
     }
+  }
+
+  artsGenerator(character) {
+    const allImages = [
+      'chara-0.png',
+      'chara-1.png',
+      'chara-2.png',
+      'chara-3.png',
+    ];
+    if (!character) {
+      return '';
+    }
+
+    return `../../../assets/accounts/characters/${allImages[character % allImages.length]}`;
+  }
+
+  getPercentage(num1, num2) {
+    return `${Math.floor((Number(num1) / Number(num2)) * 100)}%`;
+  }
+
+  getExpLeft(targetExp, currentExp, rewardExp) {
+    return Number(targetExp) - (Number(currentExp) + Number(rewardExp));
   }
 }

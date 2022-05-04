@@ -14,7 +14,11 @@ export class ConfigService {
 
   async init() {
     const env = 'production';
-    const chain = (await this._storage.get('currentChain')) || 'BSC';
+    let chain = (await this._storage.get('currentChain'));
+    if (!chain) {
+      chain = 'OEC';
+      await this._storage.set('currentChain', chain);
+    }
     this._config = {...config.environments[env].chains[chain], ...extra[chain]};
   }
 

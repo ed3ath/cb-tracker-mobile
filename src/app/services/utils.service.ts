@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import webUtils from 'web3-utils';
+import seedrandom from 'seedrandom';
+import * as characterNames from 'src/data/character-names.json';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
   public experienceTable;
+  public WeaponElement;
+  public WeaponTrait;
+  public ReputationTier;
 
   constructor() {
     this.experienceTable = [
@@ -32,6 +38,28 @@ export class UtilsService {
       25258, 25483, 25709, 25936, 26164, 26393, 26623, 26854, 27086, 27319,
       27553, 27788, 28024, 28261, 28499, 28738, 28978,
     ];
+    this.WeaponElement = {
+      Fire: 0,
+      Earth: 1,
+      Lightning: 2,
+      Water: 3,
+    };
+
+    this.WeaponTrait = {
+      STR: 0,
+      DEX: 1,
+      CHA: 2,
+      INT: 3,
+      PWR: 4,
+    };
+
+    this.ReputationTier = {
+      PEASANT: 0,
+      TRADESMAN: 1,
+      NOBLE: 2,
+      KNIGHT: 3,
+      KING: 4,
+    };
   }
 
   getNextTargetExpLevel(level) {
@@ -102,6 +130,207 @@ export class UtilsService {
     });
   }
   currencyFormat(value: number) {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return value.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+  }
+  addressPrivacy(address) {
+    return `${address.substr(0, 4)}...${address.substr(-4)}`;
+  }
+  getGasName(network) {
+    switch (network) {
+      case 'BNB':
+        return 'BNB';
+      case 'HECO':
+        return 'HT';
+      case 'OEC':
+        return 'OKT';
+      case 'POLYGON':
+        return 'MATIC';
+      case 'AVAX':
+        return 'AVAX';
+      case 'AURORA':
+        return 'AETH';
+      default:
+        return 'BNB';
+    }
+  }
+
+  reputationToTier(reputation) {
+    switch (reputation) {
+      case this.ReputationTier.PEASANT:
+        return 'Peasant';
+      case this.ReputationTier.TRADESMAN:
+        return 'Tradesman';
+      case this.ReputationTier.NOBLE:
+        return 'Noble';
+      case this.ReputationTier.KNIGHT:
+        return 'Knight';
+      case this.ReputationTier.KING:
+        return 'King';
+      default:
+        return 'Peasant';
+    }
+  }
+
+  traitNumberToName(traitNum) {
+    switch (traitNum) {
+      case this.WeaponElement.Fire:
+        return 'Fire';
+      case this.WeaponElement.Earth:
+        return 'Earth';
+      case this.WeaponElement.Water:
+        return 'Water';
+      case this.WeaponElement.Lightning:
+        return 'Lightning';
+      default:
+        return '???';
+    }
+  }
+
+  characterFromContract(id, data) {
+    const xp = data[0];
+    const level = parseInt(data[1], 10);
+    const trait = data[2];
+    const traitName = this.traitNumberToName(+data[2]);
+    const staminaTimestamp = data[3];
+    const head = data[4];
+    const arms = data[5];
+    const torso = data[6];
+    const legs = data[7];
+    const boots = data[8];
+    const race = data[9];
+    return {
+      id: +id,
+      xp,
+      level,
+      trait,
+      traitName,
+      staminaTimestamp,
+      head,
+      arms,
+      torso,
+      legs,
+      boots,
+      race,
+    };
+  }
+
+  getStatPatternFromProperties(properties) {
+    return (properties >> 5) & 0x7f;
+  }
+
+  getStat1Trait(statPattern) {
+    return statPattern % 5;
+  }
+
+  getStat2Trait(statPattern) {
+    return Math.floor(statPattern / 5) % 5;
+  }
+
+  getStat3Trait(statPattern) {
+    return Math.floor(Math.floor(statPattern / 5) / 5) % 5;
+  }
+
+  statNumberToName(statNum) {
+    switch (statNum) {
+      case this.WeaponTrait.CHA:
+        return 'CHA';
+      case this.WeaponTrait.DEX:
+        return 'DEX';
+      case this.WeaponTrait.INT:
+        return 'INT';
+      case this.WeaponTrait.PWR:
+        return 'PWR';
+      case this.WeaponTrait.STR:
+        return 'STR';
+      default:
+        return '???';
+    }
+  }
+
+  getWeaponTraitFromProperties(properties) {
+    return (properties >> 3) & 0x3;
+  }
+
+  weaponFromContract(id, data) {
+    const properties = data[0];
+    const stat1 = data[1];
+    const stat2 = data[2];
+    const stat3 = data[3];
+    const level = +data[4];
+    const cosmetics = +data[5];
+    const blade = (cosmetics & 0xff).toString();
+    const crossguard = ((cosmetics >> 8) & 0xff).toString();
+    const grip = ((cosmetics >> 16) & 0xff).toString();
+    const pommel = ((cosmetics >> 24) & 0xff).toString();
+    const burnPoints = +data[6];
+    const bonusPower = +data[7];
+    const weaponType = +data[8];
+
+    const stat1Value = +stat1;
+    const stat2Value = +stat2;
+    const stat3Value = +stat3;
+
+    const statPattern = this.getStatPatternFromProperties(+properties);
+    const stat1Type = this.getStat1Trait(statPattern);
+    const stat2Type = this.getStat2Trait(statPattern);
+    const stat3Type = this.getStat3Trait(statPattern);
+
+    const traitNum = this.getWeaponTraitFromProperties(+properties);
+
+    const lowStarBurnPoints = burnPoints & 0xff;
+    const fourStarBurnPoints = (burnPoints >> 8) & 0xff;
+    const fiveStarBurnPoints = (burnPoints >> 16) & 0xff;
+
+    const stars = +properties & 0x7;
+    return {
+      id: +id,
+      properties,
+      trait: traitNum,
+      element: this.traitNumberToName(traitNum),
+      stat1: this.statNumberToName(stat1Type),
+      stat1Value,
+      stat1Type,
+      stat2: this.statNumberToName(stat2Type),
+      stat2Value,
+      stat2Type,
+      stat3: this.statNumberToName(stat3Type),
+      stat3Value,
+      stat3Type,
+      level,
+      blade,
+      crossguard,
+      grip,
+      pommel,
+      stars,
+      lowStarBurnPoints,
+      fourStarBurnPoints,
+      fiveStarBurnPoints,
+      bonusPower,
+      traitNum,
+      weaponType,
+    };
+  }
+
+  getRandom(rng, arr) {
+    return arr[Math.floor(rng() * arr.length)];
+  }
+
+  getCharacterNameFromSeed(seed) {
+    const rng = seedrandom(seed?.toString());
+
+    const firstKey = this.getRandom(rng, ['one', 'two', 'three', 'more']);
+    const secondKey = this.getRandom(rng, ['one', 'two', 'three', 'more']);
+
+    const firstName = this.getRandom(rng, characterNames[firstKey]);
+    const secondName = this.getRandom(rng, characterNames[secondKey]);
+
+    return `${firstName} ${secondName}`;
+  }
+
+  getCharacterPowerByLevel(level) {
+    return (1000 + level * 10) * (Math.floor(level / 10) + 1);
   }
 }
