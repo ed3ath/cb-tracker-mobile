@@ -37,7 +37,8 @@
           }
         ],
         "no-underscore-dangle": "off",
-        "@typescript-eslint/naming-convention": "off"
+        "@typescript-eslint/naming-convention": "off",
+        "no-bitwise": "off"
       }
     },
     {

@@ -37,6 +37,7 @@
     "ngx-build-plus": "^13.0.1",
     "node-fetch": "^2.6.1",
     "rxjs": "~6.6.0",
+    "seedrandom": "^3.0.5",
     "tslib": "^2.2.0",
     "url": "^0.11.0",
     "web3": "^1.7.3",

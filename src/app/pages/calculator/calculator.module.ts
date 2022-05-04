@@ -2,17 +2,17 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TreasuryPage } from './treasury.page';
+import { CalculatorPage } from './calculator.page';
 
-import { TreasuryPageRoutingModule } from './treasury-routing.module';
+import { CalculatorPageRoutingModule } from './calculator-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    TreasuryPageRoutingModule
+    CalculatorPageRoutingModule
   ],
-  declarations: [TreasuryPage]
+  declarations: [CalculatorPage]
 })
-export class TreasuryPageModule {}
+export class CalculatorPageModule {}

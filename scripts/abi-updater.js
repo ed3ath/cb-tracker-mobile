@@ -8,7 +8,11 @@ const ABIS = [
   'Characters',
   'Weapons',
   'SimpleQuests',
-  'Treasury'
+  'Treasury',
+  'IStakingRewards',
+  'SkillStakingRewardsUpgradeable',
+  'SkillStakingRewardsUpgradeable90',
+  'SkillStakingRewardsUpgradeable180'
 ];
 
 async function updateMainAbi() {

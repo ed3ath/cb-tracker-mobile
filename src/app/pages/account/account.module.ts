@@ -2,9 +2,10 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AccountPage } from './account.page';
 
+import { AccountPage } from './account.page';
 import { AccountPageRoutingModule } from './account-routing.module';
+import { AddModalComponent } from 'src/app/modals/account/add.modal';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { AccountPageRoutingModule } from './account-routing.module';
     FormsModule,
     AccountPageRoutingModule
   ],
-  declarations: [AccountPage]
+  declarations: [AccountPage, AddModalComponent],
+  entryComponents: [AddModalComponent]
 })
 export class AccountPageModule {}

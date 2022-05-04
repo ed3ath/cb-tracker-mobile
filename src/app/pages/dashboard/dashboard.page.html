@@ -1,81 +1,73 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="false">
   <ion-toolbar>
-    <ion-title>
-      Dashboard
-    </ion-title>
+    <ion-img id="cbt-logo" [src]="mainLogo"></ion-img>
+    <span class="bsc-logo" slot="end"></span>
+    <ion-buttons slot="end">
+      <ion-menu-button>
+        <ion-icon [src]="burgerMenu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Current SKILL Price</ion-card-subtitle>
-      <ion-card-title>
-        {{_skillPrice}}
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total Claimable SKILL</ion-card-subtitle>
-      <ion-card-title>
-        70.835925
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total Unclaimed SKILL</ion-card-subtitle>
-      <ion-card-title>
-        139.121298
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total Staked SKILL</ion-card-subtitle>
-      <ion-card-title>
-        0.000000
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total SKILL in Wallet</ion-card-subtitle>
-      <ion-card-title>
-        0.000000
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total SKILL Assets</ion-card-subtitle>
-      <ion-card-title>
-        139.121298
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total Accounts</ion-card-subtitle>
-      <ion-card-title>
-        20
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Total Characters</ion-card-subtitle>
-      <ion-card-title>
-        48
-      </ion-card-title>
-    </ion-card-header>
-  </ion-card>
+<ion-header id="header-inner" [translucent]="true" slot="start">
+  <ion-toolbar id="content-header">
+    <h2>DASHBOARD</h2>
+    <ion-img id="cbt-logo" [src]="headerBg"></ion-img>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div id="container">
+    <ion-grid id="dashboard">
+      <ion-row>
+        <ion-col size="6">
+          <div>
+            <span>SKILL Price (USD)</span>
+            <h3>{{_skillPrice}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>Total Claimable SKILL</span>
+            <h3>{{_skillAssets.claimable}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>Total Unclaimed</span>
+            <h3>{{_skillAssets.unclaimed}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>Total Staked</span>
+            <h3>{{_skillAssets.staked}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>SKILL in Wallet</span>
+            <h3>{{_skillAssets.wallet}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>SKILL Assets</span>
+            <h3>{{_skillAssets.claimable}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>Total Accounts</span>
+            <h3>{{_accounts}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div>
+            <span>Total Characters</span>
+            <h3>{{_characters}}</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

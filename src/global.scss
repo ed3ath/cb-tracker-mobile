@@ -24,3 +24,36 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+ion-content{
+  --background: var(--ion-color-primary);
+}
+
+ion-header{
+  background-color: black !important;
+}
+
+ion-modal{
+  --background: #000e1d65 ;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../src/assets/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../src/assets/fonts/cinzel.ttf');
+}
+
+.toaster {
+  --color: var(--ion-color-secondary);
+  --border:1px solid var(--ion-color-primary-tint);
+  --border-radius: 5px;
+  --background: var(--ion-color-primary);
+}
+
+.toaster-btn {
+  --color: var(--ion-color-secondary);
+}
