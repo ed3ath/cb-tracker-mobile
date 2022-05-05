@@ -179,7 +179,7 @@ export class ContractService {
       this._config.get('SKILL_PAIR_CONTRACT_ADDRESS')
     );
     const reserves = await contract.methods.getReserves().call();
-    if (chain === 'OEC' || chain === 'POLYGON') {
+    if (chain === 'OEC' || chain === 'POLYGON' || chain === 'AURORA') {
       return reserves[0] / reserves[1];
     }
     return reserves[1] / reserves[0];
@@ -187,15 +187,20 @@ export class ContractService {
 
   async getGasPrice() {
     const chain = await this.getChain();
-    const contract = this.setContract(
-      swapPairAbi,
-      this._config.get('TOKEN_PAIR_CONTRACT_ADDRESS')
-    );
-    const reserves = await contract.methods.getReserves().call();
-    if (chain === 'OEC') {
-      return reserves[0] / reserves[1];
+    if (chain !== 'AURORA') {
+      const contract = this.setContract(
+        swapPairAbi,
+        this._config.get('TOKEN_PAIR_CONTRACT_ADDRESS')
+      );
+      const reserves = await contract.methods.getReserves().call();
+      if (chain === 'OEC') {
+        return reserves[0] / reserves[1];
+      }
+      return reserves[1] / reserves[0];
+    } else {
+      const price = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd`);
+      return price.data.near.usd;
     }
-    return reserves[1] / reserves[0];
   }
 
   async skillPriceTicker() {
@@ -212,7 +217,11 @@ export class ContractService {
       gasPrice *= 1000000000000;
       skillPrice *= 1000000000000;
     }
-    if (chain === 'BNB') {
+    if (chain === 'AURORA') {
+      skillPrice /= 1000000;
+      skillPrice *= gasPrice;
+    }
+    if (chain === 'BSC') {
       this._skillPrice = skillPrice * gasPrice;
     } else {
       this._skillPrice = skillPrice;
