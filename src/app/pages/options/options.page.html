@@ -11,45 +11,28 @@
 </ion-header>
 <ion-header id="header-inner" [translucent]="true" slot="start">
   <ion-toolbar id="content-header">
-    <h2>DIAGNOSTIC</h2>
+    <h2>OPTIONS</h2>
     <ion-img id="cbt-logo" src="../../../assets/dungeon.jpg"></ion-img>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
   <ion-item>
     <ion-label>Select Chain</ion-label>
-    <ion-select placeholder="Select Network" value="BNB">
+    <ion-select placeholder="Select Network" [(ngModel)]="_chain">
       <ion-select-option value="BNB">Binance</ion-select-option>
       <ion-select-option value="HECO">HECO Chain</ion-select-option>
       <ion-select-option value="OEC">OKEx Chain</ion-select-option>
       <ion-select-option value="POLYGON">Polygon</ion-select-option>
       <ion-select-option value="AVAX">Avalanche</ion-select-option>
+      <ion-select-option value="AURORA">Aurora</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>Currency</ion-label>
-    <ion-select placeholder="Select Currency" value="usd">
-      <ion-select-option value="usd">USD</ion-select-option>
-      <ion-select-option value="gbp">GBP</ion-select-option>
-      <ion-select-option value="eur">EUR</ion-select-option>
-      <ion-select-option value="php">PHP</ion-select-option>
-      <ion-select-option value="aud">AUD</ion-select-option>
+    <ion-select placeholder="Select Currency" [(ngModel)]="_currentCurrency">
+      <ion-select-option *ngFor="let cur of _currencies" [value]="cur">{{cur.toUpperCase()}}</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-item>
-    <ion-label>Type</ion-label>
-    <ion-select placeholder="Select Currency" value="usd">
-      <ion-select-option value="usd">Character</ion-select-option>
-      <ion-select-option value="gbp">Weapon</ion-select-option>
-      <ion-select-option value="eur">Shield</ion-select-option>
-      <ion-select-option value="php">Armor</ion-select-option>
-      <ion-select-option value="aud">Trinket</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>NFT ID</ion-label>
-    <p slot="end">139704</p>
-  </ion-item>
-  <button>Run</button>
+  <button (click)="saveOptions()">Save</button>
 </ion-content>
 

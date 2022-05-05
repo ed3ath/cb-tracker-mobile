@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Interface } from '@ethersproject/abi';
 import { Storage } from '@ionic/storage-angular';
 import Web3 from 'web3';
+import axios from 'axios';
 
 import { ConfigService } from './config.service';
 import { UtilsService } from './utils.service';
@@ -119,13 +120,21 @@ export class ContractService {
   }
 
   async getChain() {
-    return await this._storage.get('currentChain');
+    return (await this._storage.get('network')) || 'BNB';
   }
 
   async setChain(chain: string) {
     if (config.supportedChains.includes(chain)) {
-      await this._storage.set('currentChain', chain);
+      await this._storage.set('network', chain);
     }
+  }
+
+  async getCurrency() {
+    return (await this._storage.get('currency')) || 'usd';
+  }
+
+  async setCurrency(currency: string) {
+    await this._storage.set('currency', currency);
   }
 
   getContract(key: string) {
@@ -191,6 +200,7 @@ export class ContractService {
 
   async skillPriceTicker() {
     const chain = await this.getChain();
+    const currency = await this.getCurrency();
     let skillPrice = await this.getSkillPrice();
     let gasPrice = await this.getGasPrice();
 
@@ -208,6 +218,13 @@ export class ContractService {
       this._skillPrice = skillPrice;
     }
     this._gasPrice = gasPrice;
+    if (currency !== 'usd') {
+      const localPrice = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=${currency}`);
+      if (localPrice) {
+        this._skillPrice *= localPrice.data.tether[currency];
+        this._gasPrice *= localPrice.data.tether[currency];
+      }
+    }
   }
 
   async getSkillAssets(accounts) {

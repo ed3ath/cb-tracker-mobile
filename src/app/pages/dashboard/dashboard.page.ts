@@ -10,6 +10,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class DashboardPage implements OnInit {
   _chain: string;
+  _currentCurrency: string;
   _skillPrice: any;
   _gasPrice: any;
   _skillAssets: any;
@@ -28,7 +29,7 @@ export class DashboardPage implements OnInit {
     private _contracts: ContractService,
     private _utils: UtilsService
   ) {
-    this._skillPrice = this._utils.currencyFormat(0);
+    this._skillPrice = this._utils.currencyFormat(0, this._currentCurrency);
     this._skillAssets = {
       staked: '0.000000',
       unclaimed: '0.000000',
@@ -37,6 +38,8 @@ export class DashboardPage implements OnInit {
     };
     this._accounts = 0;
     this._characters = 0;
+    this._chain = '';
+    this._currentCurrency = '';
   }
 
   async ngOnInit() {
@@ -61,10 +64,11 @@ export class DashboardPage implements OnInit {
     );
 
     this._chain = await this._contracts.getChain();
+    this._currentCurrency = await this._contracts.getCurrency();
     this._accounts = accounts.length;
     this._characters = this._utils.sumOfArray(charIds.map((i: []) => i.length));
-    this._skillPrice = this._utils.currencyFormat(this._contracts._skillPrice);
-    this._gasPrice = this._utils.currencyFormat(this._contracts._gasPrice);
+    this._skillPrice = this._utils.currencyFormat(this._contracts._skillPrice, this._currentCurrency);
+    this._gasPrice = this._utils.currencyFormat(this._contracts._gasPrice, this._currentCurrency);
     this._gasBalances = await Promise.all(
       accounts.map(async (acc) => await this._contracts.getGasBalance(acc))
     );
