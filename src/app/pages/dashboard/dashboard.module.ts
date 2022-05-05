@@ -5,12 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { DashboardPage } from './dashboard.page';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
+import { ComponentModule } from '../component.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    ComponentModule,
     DashboardPageRoutingModule
   ],
   declarations: [DashboardPage]

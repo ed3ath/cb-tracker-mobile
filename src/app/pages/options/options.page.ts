@@ -13,6 +13,9 @@ export class OptionsPage implements OnInit {
   _currentCurrency: string;
   _chain: string;
 
+  public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'DIAGNOSTIC';
+
   constructor(
     private _contracts: ContractService,
     private _utils: UtilsService
