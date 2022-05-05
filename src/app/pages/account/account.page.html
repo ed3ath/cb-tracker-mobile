@@ -21,10 +21,7 @@
               <ion-item slot="header">
                 <ion-label>{{_names[_account]}}</ion-label>
                 <div>
-                  <ion-icon src="../../../assets/accounts/checkbox.svg"></ion-icon>
-                  <ion-icon src="../../../assets/accounts/sword.svg"></ion-icon>
-                  <ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon>
-                  <ion-icon src="../../../assets/accounts/trash.svg"></ion-icon>
+                  <button class="menu-btn" (click)="showMenu(_account)"><ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon></button>
                 </div>
               </ion-item>
               <ion-list slot="content">

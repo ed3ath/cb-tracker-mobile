@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonAccordionGroup, ModalController } from '@ionic/angular';
+import { IonAccordionGroup, ModalController, ActionSheetController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 import { ContractService } from 'src/app/services/contracts.service';
@@ -39,7 +39,8 @@ export class AccountPage implements OnInit {
     private modalCtrl: ModalController,
     private _storage: Storage,
     private _contracts: ContractService,
-    private _utils: UtilsService
+    private _utils: UtilsService,
+    private _action: ActionSheetController
   ) {}
 
   async ngOnInit() {
@@ -142,5 +143,41 @@ export class AccountPage implements OnInit {
 
   getExpLeft(targetExp, currentExp, rewardExp) {
     return Number(targetExp) - (Number(currentExp) + Number(rewardExp));
+  }
+
+  async showMenu(address) {
+    const actionSheet = await this._action.create({
+      header: 'Menu',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Rename',
+        handler: () => {
+          console.log(address);
+        }
+      }, {
+        text: 'Combat Simulator',
+        handler: () => {
+          console.log(address);
+        }
+      }, {
+        text: 'Fight Logs',
+        handler: () => {
+          console.log(address);
+        }
+      }, {
+        text: 'Delete',
+        handler: () => {
+          console.log(address);
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await actionSheet.present();
   }
 }
