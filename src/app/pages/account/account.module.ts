@@ -9,6 +9,7 @@ import { AddModalComponent } from 'src/app/modals/account/add.modal';
 import { ComponentModule } from '../component.module';
 
 
+import { ImportModalComponent } from 'src/app/modals/account/import.modal';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { ComponentModule } from '../component.module';
     ComponentModule,
     AccountPageRoutingModule
   ],
-  declarations: [AccountPage, AddModalComponent],
-  entryComponents: [AddModalComponent]
+  declarations: [AccountPage, AddModalComponent, ImportModalComponent],
+  entryComponents: [AddModalComponent, ImportModalComponent]
 })
 export class AccountPageModule {}

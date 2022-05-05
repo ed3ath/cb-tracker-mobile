@@ -7,7 +7,7 @@
           <button (click)="openModalAddAccount()">Add Account</button>
         </ion-col>
         <ion-col size="4">
-          <button>Import</button>
+          <button (click)="openModalImport()">Import</button>
         </ion-col>
         <ion-col size="4">
           <button>Export</button>
@@ -39,31 +39,31 @@
                     <ion-col size="6">
                       <div>
                         <span>{{_gasName}} Balance</span>
-                        <h3>{{_utils.formatNumber(_gasBalances[i])}} ({{_utils.currencyFormat(_gasBalances[i] * _gasPrice)}})</h3>
+                        <h3>{{_utils.formatNumber(_gasBalances[i])}} ({{_utils.currencyFormat(_gasBalances[i] * _gasPrice, _currentCurrency)}})</h3>
                       </div>
                     </ion-col>
                     <ion-col size="6">
                       <div>
                         <span>Unclaimed</span>
-                        <h3>{{_utils.formatNumber(_skillAssets.unclaimed[i])}} ({{_utils.currencyFormat(_skillAssets.unclaimed[i] * _skillPrice)}})</h3>
+                        <h3>{{_utils.formatNumber(_skillAssets.unclaimed[i])}} ({{_utils.currencyFormat(_skillAssets.unclaimed[i] * _skillPrice, _currentCurrency)}})</h3>
                       </div>
                     </ion-col>
                     <ion-col size="6">
                       <div>
                         <span>Claimable</span>
-                        <h3>{{_utils.formatNumber(_skillAssets.claimable[i])}} ({{_utils.currencyFormat(_skillAssets.claimable[i] * _skillPrice)}})</h3>
+                        <h3>{{_utils.formatNumber(_skillAssets.claimable[i])}} ({{_utils.currencyFormat(_skillAssets.claimable[i] * _skillPrice, _currentCurrency)}})</h3>
                       </div>
                     </ion-col>
                     <ion-col size="6">
                       <div>
                         <span>Staked</span>
-                        <h3>{{_utils.formatNumber(_skillAssets.staked[i])}} ({{_utils.currencyFormat(_skillAssets.staked[i] * _skillPrice)}})</h3>
+                        <h3>{{_utils.formatNumber(_skillAssets.staked[i])}} ({{_utils.currencyFormat(_skillAssets.staked[i] * _skillPrice, _currentCurrency)}})</h3>
                       </div>
                     </ion-col>
                     <ion-col size="6">
                       <div>
                         <span>Wallet</span>
-                        <h3>{{_utils.formatNumber(_skillAssets.wallet[i])}} ({{_utils.currencyFormat(_skillAssets.wallet[i] * _skillPrice)}})</h3>
+                        <h3>{{_utils.formatNumber(_skillAssets.wallet[i])}} ({{_utils.currencyFormat(_skillAssets.wallet[i] * _skillPrice, _currentCurrency)}})</h3>
                       </div>
                     </ion-col>
                   </ion-row>
@@ -81,7 +81,7 @@
                           <h5>{{_utils.getCharacterNameFromSeed(_charId)}}</h5>
                           <ion-row class="ion-justify-content-start">
                             <ion-col size="1">
-                              <span class="fire"></span>
+                              <span [class]="_characters[i].charsData[_charIndex].traitName.toLowerCase()"></span>
                             </ion-col>
                             <ion-col size="11" id="lvl">
                               <!-- // -->
