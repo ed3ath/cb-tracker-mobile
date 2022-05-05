@@ -16,9 +16,9 @@ import { ImportModalComponent } from 'src/app/modals/account/import.modal';
 export class AccountPage implements OnInit {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
-  public mainLogo = '../../assets/cbt-logo.svg';
-  public burgerMenu = '../../assets/burger-menu.svg';
   public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'ACCOUNTS';
+
 
   _chain: string;
   _currentCurrency: string;

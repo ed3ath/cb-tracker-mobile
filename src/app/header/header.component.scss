@@ -1,0 +1,51 @@
+ion-menu-button {
+  color: var(--ion-color-secondary);
+}
+
+ion-header {
+  ion-toolbar {
+    // set background color
+    --background: #000E1D;
+    // set icon/text color
+    --color: #ffffff;
+    border-bottom: 1px solid #ffffff41;
+    padding:5px 0px 5px 15px;
+  }
+}
+
+ion-toolbar{
+  span{
+    content: url('../../assets/bsc-logo.png');
+    width: 1.2em;
+    height: 1.3em;
+  }
+}
+
+ion-header {
+  ion-toolbar{
+    &:nth-child(1){
+      ion-img{
+        width: 7em;
+      }
+    }
+    &:nth-child(2){
+      padding: 0px;
+      ion-img{
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+      }
+      h2{
+       font-family: Cinzel;
+       position: absolute;
+       top: 20%;
+       z-index: 2;
+       left: 50%;
+       transform: translateX(-50%);
+       white-space: nowrap;
+      }
+    }
+  }
+}
+
+

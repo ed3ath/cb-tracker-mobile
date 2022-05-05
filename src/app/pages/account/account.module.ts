@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { AccountPage } from './account.page';
 import { AccountPageRoutingModule } from './account-routing.module';
 import { AddModalComponent } from 'src/app/modals/account/add.modal';
+import { ComponentModule } from '../component.module';
+
+
 import { ImportModalComponent } from 'src/app/modals/account/import.modal';
 
 @NgModule({
@@ -13,6 +16,7 @@ import { ImportModalComponent } from 'src/app/modals/account/import.modal';
     IonicModule,
     CommonModule,
     FormsModule,
+    ComponentModule,
     AccountPageRoutingModule
   ],
   declarations: [AccountPage, AddModalComponent, ImportModalComponent],
