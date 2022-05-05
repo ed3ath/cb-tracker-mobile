@@ -116,7 +116,6 @@ export class AccountPage implements OnInit {
         ),
       };
       this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
-      console.log(this._charIds, this._characters);
     }
     if (!this._isDestroyed) {
       setTimeout(() => this.ticker(), 5000);
