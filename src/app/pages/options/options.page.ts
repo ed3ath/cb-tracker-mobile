@@ -7,6 +7,9 @@ import { Component } from '@angular/core';
 })
 export class OptionsPage {
 
+  public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'DIAGNOSTIC';
+
   constructor() {}
 
 }

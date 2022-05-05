@@ -19,9 +19,8 @@ export class DashboardPage implements OnInit {
   _characters: number;
   _isDestroyed: boolean;
 
-  public mainLogo = '../../assets/cbt-logo.svg';
-  public burgerMenu = '../../assets/burger-menu.svg';
   public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'DASHBOARD';
 
   constructor(
     private _storage: Storage,

@@ -1,20 +1,4 @@
-<ion-header [translucent]="false">
-  <ion-toolbar>
-    <ion-img id="cbt-logo" src="../../../assets/cbt-logo.svg"></ion-img>
-    <span class="bsc-logo" slot="end"></span>
-    <ion-buttons slot="end">
-      <ion-menu-button>
-        <ion-icon [src]="burgerMenu"></ion-icon>
-      </ion-menu-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-<ion-header id="header-inner" [translucent]="true" slot="start">
-  <ion-toolbar id="content-header">
-    <h2>DIAGNOSTIC</h2>
-    <ion-img id="cbt-logo" src="../../../assets/dungeon.jpg"></ion-img>
-  </ion-toolbar>
-</ion-header>
+<app-header [headerTitle]="headerTitle" [subHeaderBg]="headerBg"></app-header>
 <ion-content [fullscreen]="true">
   <ion-item>
     <ion-label>Select Chain</ion-label>

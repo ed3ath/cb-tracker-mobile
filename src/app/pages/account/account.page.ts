@@ -14,9 +14,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class AccountPage implements OnInit {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
-  public mainLogo = '../../assets/cbt-logo.svg';
-  public burgerMenu = '../../assets/burger-menu.svg';
   public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'ACCOUNTS';
+
 
   _chain: string;
   _skillPrice: any;
