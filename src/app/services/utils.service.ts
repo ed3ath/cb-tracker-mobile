@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import webUtils from 'web3-utils';
 import seedrandom from 'seedrandom';
-import * as characterNames from 'src/data/character-names.json';
 
+import * as characterNames from 'src/data/character-names.json';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class UtilsService {
   public WeaponTrait;
   public ReputationTier;
 
-  constructor() {
+  constructor(private _toaster: ToastController) {
     this.experienceTable = [
       16, 17, 18, 19, 20, 22, 24, 26, 28, 30, 33, 36, 39, 42, 46, 50, 55, 60,
       66, 72, 79, 86, 94, 103, 113, 124, 136, 149, 163, 178, 194, 211, 229, 248,
@@ -113,9 +114,15 @@ export class UtilsService {
   ucfirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-  fromEther = (value) =>
-    webUtils.fromWei(BigInt(Math.trunc(value)).toString(), 'ether');
-  toEther = (value) => webUtils.toWei(value.toFixed(18), 'ether');
+
+  fromEther(value) {
+    return webUtils.fromWei(BigInt(Math.trunc(value)).toString(), 'ether');
+  }
+
+  toEther(value) {
+    return webUtils.toWei(value.toFixed(18), 'ether');
+  }
+
   sumOfStakedSkill(...arr) {
     let total = 0;
     arr.forEach((i) => {
@@ -123,21 +130,25 @@ export class UtilsService {
     });
     return total;
   }
+
   formatNumber(val, dec = 6) {
     return Number(val).toLocaleString('en', {
       minimumFractionDigits: dec,
       maximumFractionDigits: dec,
     });
   }
-  currencyFormat(value: number) {
+
+  currencyFormat(value: number, currency = 'USD') {
     return value.toLocaleString('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency,
     });
   }
+
   addressPrivacy(address) {
     return `${address.substr(0, 4)}...${address.substr(-4)}`;
   }
+
   getGasName(network) {
     switch (network) {
       case 'BNB':
@@ -332,5 +343,28 @@ export class UtilsService {
 
   getCharacterPowerByLevel(level) {
     return (1000 + level * 10) * (Math.floor(level / 10) + 1);
+  }
+
+  async displayToaster(message) {
+    this._toaster
+      .create({
+        message,
+        position: 'top',
+        cssClass: 'toaster',
+        duration: 2000,
+        buttons: [
+          {
+            side: 'end',
+            text: 'Close',
+            role: 'cancel',
+            handler: () => {
+              console.log('');
+            },
+          },
+        ],
+      })
+      .then((toast) => {
+        toast.present();
+      });
   }
 }

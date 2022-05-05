@@ -1,0 +1,15 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-img id="cbt-logo" [src]="mainLogo"></ion-img>
+    <span class="bsc-logo" slot="end"></span>
+    <ion-buttons slot="end">
+      <ion-menu-button>
+        <ion-icon [src]="burgerMenu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar id="content-header">
+    <h2>{{headerTitle}}</h2>
+    <ion-img id="cbt-logo" [src]="subHeaderBg"></ion-img>
+  </ion-toolbar>
+</ion-header>

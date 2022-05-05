@@ -1,10 +1,12 @@
-import { AddModalComponent } from '../../modals/account/add.modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
+
+import { AddModalComponent } from 'src/app/modals/account/add.modal';
+import { ImportModalComponent } from 'src/app/modals/account/import.modal';
 
 @Component({
   selector: 'app-account',
@@ -14,11 +16,12 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class AccountPage implements OnInit {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
-  public mainLogo = '../../assets/cbt-logo.svg';
-  public burgerMenu = '../../assets/burger-menu.svg';
   public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'ACCOUNTS';
+
 
   _chain: string;
+  _currentCurrency: string;
   _skillPrice: any;
   _gasPrice: any;
   _skillAssets: any;
@@ -46,6 +49,8 @@ export class AccountPage implements OnInit {
     if (this._chain !== 'AVAX') {
       this._repRequirements = await this._contracts.getReputationLevelRequirements();
     }
+    this._chain = '';
+    this._currentCurrency = '';
     await this.ticker();
   }
 
@@ -65,10 +70,19 @@ export class AccountPage implements OnInit {
     await modal.present();
   }
 
+  async openModalImport() {
+    const modal = await this.modalCtrl.create({
+      component: ImportModalComponent,
+    });
+
+    await modal.present();
+  }
+
   async ticker() {
     if (this._contracts._isInit) {
 
       this._chain = await this._contracts.getChain();
+      this._currentCurrency = await this._contracts.getCurrency();
       this._names = (await this._storage.get('names')) || {};
       this._accounts = (await this._storage.get('accounts')) || [];
       this._gasName = this._utils.getGasName(this._chain);
@@ -102,7 +116,6 @@ export class AccountPage implements OnInit {
         ),
       };
       this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
-      console.log(this._charIds, this._characters);
     }
     if (!this._isDestroyed) {
       setTimeout(() => this.ticker(), 5000);

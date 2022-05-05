@@ -9,6 +9,9 @@ import axios from 'axios';
   styleUrls: ['calculator.page.scss'],
 })
 export class CalculatorPage implements OnInit {
+  public headerBg = '../../assets/dungeon.jpg';
+  public headerTitle = 'REWARDS CALCULATOR';
+
   _partners;
   public dummyData = [
     { id: 7, minSkill: '0.12341', maxSkill: '0.31396', minExp: '544',maxExp: '6943' },

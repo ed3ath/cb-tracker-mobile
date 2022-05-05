@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Interface } from '@ethersproject/abi';
 import { Storage } from '@ionic/storage-angular';
 import Web3 from 'web3';
+import axios from 'axios';
 
 import { ConfigService } from './config.service';
 import { UtilsService } from './utils.service';
@@ -119,13 +120,21 @@ export class ContractService {
   }
 
   async getChain() {
-    return await this._storage.get('currentChain');
+    return (await this._storage.get('network')) || 'BNB';
   }
 
   async setChain(chain: string) {
     if (config.supportedChains.includes(chain)) {
-      await this._storage.set('currentChain', chain);
+      await this._storage.set('network', chain);
     }
+  }
+
+  async getCurrency() {
+    return (await this._storage.get('currency')) || 'usd';
+  }
+
+  async setCurrency(currency: string) {
+    await this._storage.set('currency', currency);
   }
 
   getContract(key: string) {
@@ -170,7 +179,7 @@ export class ContractService {
       this._config.get('SKILL_PAIR_CONTRACT_ADDRESS')
     );
     const reserves = await contract.methods.getReserves().call();
-    if (chain === 'OEC' || chain === 'POLYGON') {
+    if (chain === 'OEC' || chain === 'POLYGON' || chain === 'AURORA') {
       return reserves[0] / reserves[1];
     }
     return reserves[1] / reserves[0];
@@ -178,19 +187,25 @@ export class ContractService {
 
   async getGasPrice() {
     const chain = await this.getChain();
-    const contract = this.setContract(
-      swapPairAbi,
-      this._config.get('TOKEN_PAIR_CONTRACT_ADDRESS')
-    );
-    const reserves = await contract.methods.getReserves().call();
-    if (chain === 'OEC') {
-      return reserves[0] / reserves[1];
+    if (chain !== 'AURORA') {
+      const contract = this.setContract(
+        swapPairAbi,
+        this._config.get('TOKEN_PAIR_CONTRACT_ADDRESS')
+      );
+      const reserves = await contract.methods.getReserves().call();
+      if (chain === 'OEC') {
+        return reserves[0] / reserves[1];
+      }
+      return reserves[1] / reserves[0];
+    } else {
+      const price = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd`);
+      return price.data.near.usd;
     }
-    return reserves[1] / reserves[0];
   }
 
   async skillPriceTicker() {
     const chain = await this.getChain();
+    const currency = await this.getCurrency();
     let skillPrice = await this.getSkillPrice();
     let gasPrice = await this.getGasPrice();
 
@@ -202,12 +217,23 @@ export class ContractService {
       gasPrice *= 1000000000000;
       skillPrice *= 1000000000000;
     }
-    if (chain === 'BNB') {
+    if (chain === 'AURORA') {
+      skillPrice /= 1000000;
+      skillPrice *= gasPrice;
+    }
+    if (chain === 'BSC') {
       this._skillPrice = skillPrice * gasPrice;
     } else {
       this._skillPrice = skillPrice;
     }
     this._gasPrice = gasPrice;
+    if (currency !== 'usd') {
+      const localPrice = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=${currency}`);
+      if (localPrice) {
+        this._skillPrice *= localPrice.data.tether[currency];
+        this._gasPrice *= localPrice.data.tether[currency];
+      }
+    }
   }
 
   async getSkillAssets(accounts) {

@@ -5,3 +5,37 @@
 .alt-text {
   font-size: 18px;
 }
+
+
+ion-content{
+  div#splash-bg{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-image: url('../../../assets/splash-bg.png');
+    background-position: center;
+    background-size: cover;
+    opacity: 0.3;
+    animation: movingBg 6s infinite linear;
+  }
+
+  ion-img{
+    width: 65%;
+    position: absolute;
+    margin-top: 50%;
+    margin-left: 18%;
+    transform: translateY(170%);
+  }
+}
+
+@keyframes movingBg {
+   0%{
+      background-size: 110%;
+   }
+   0%{
+    background-size: 120%;
+   }
+   100%{
+      background-size: 100%;
+   }
+}
