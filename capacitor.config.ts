@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'net.cwsdev.cbtracker',
   appName: 'CryptoBlades Tracker',
   webDir: 'www',
   bundledWebRuntime: false
