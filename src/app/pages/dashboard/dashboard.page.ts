@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -8,7 +8,7 @@ import { UtilsService } from 'src/app/services/utils.service';
   templateUrl: 'dashboard.page.html',
   styleUrls: ['dashboard.page.scss'],
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage {
   _chain: string;
   _currentCurrency: string;
   _skillPrice: any;
@@ -18,7 +18,6 @@ export class DashboardPage implements OnInit {
   _multiplier: number;
   _accounts: number;
   _characters: number;
-  _isDestroyed: boolean;
 
   public headerBg = '../../assets/dungeon.jpg';
   public headerTitle = 'DASHBOARD';
@@ -41,13 +40,8 @@ export class DashboardPage implements OnInit {
     this._currentCurrency = '';
   }
 
-  async ngOnInit() {
-    this._isDestroyed = false;
+  async ionViewDidEnter() {
     await this.ticker();
-  }
-
-  async ionViewDidLeave() {
-    this._isDestroyed = true;
   }
 
   async ticker() {
@@ -90,8 +84,5 @@ export class DashboardPage implements OnInit {
         )
       ),
     };
-    if (!this._isDestroyed) {
-      setTimeout(() => this.ticker(), 5000);
-    }
   }
 }

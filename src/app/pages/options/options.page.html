@@ -17,6 +17,10 @@
       <ion-select-option *ngFor="let cur of _currencies" [value]="cur">{{cur.toUpperCase()}}</ion-select-option>
     </ion-select>
   </ion-item>
+  <ion-item>
+    <ion-label>Receive Notifications</ion-label>
+    <ion-toggle color="secondary" [(ngModel)]="_notifications"></ion-toggle>
+  </ion-item>
   <button (click)="saveOptions()">Save</button>
 </ion-content>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonAccordionGroup, ModalController, ActionSheetController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
@@ -13,7 +13,7 @@ import { ImportModalComponent } from 'src/app/modals/account/import.modal';
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss'],
 })
-export class AccountPage implements OnInit {
+export class AccountPage {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
   public headerBg = '../../assets/dungeon.jpg';
@@ -32,7 +32,6 @@ export class AccountPage implements OnInit {
   _charIds: any;
   _characters: any;
   _gasName: string;
-  _isDestroyed: boolean;
   _repRequirements: any;
 
   constructor(
@@ -40,23 +39,15 @@ export class AccountPage implements OnInit {
     private _storage: Storage,
     private _contracts: ContractService,
     private _utils: UtilsService,
-    private _action: ActionSheetController
+    private _action: ActionSheetController,
   ) {}
 
-  async ngOnInit() {
-    this._isDestroyed = false;
+  async ionViewDidEnter() {
     this._names = (await this._storage.get('names')) || {};
     this._accounts = (await this._storage.get('accounts')) || [];
-    if (this._chain !== 'AVAX') {
-      this._repRequirements = await this._contracts.getReputationLevelRequirements();
-    }
     this._chain = '';
-    this._currentCurrency = '';
+    this._currentCurrency = 'USD';
     await this.ticker();
-  }
-
-  async ionViewDidLeave() {
-    this._isDestroyed = true;
   }
 
   closeAccordion() {
@@ -79,9 +70,16 @@ export class AccountPage implements OnInit {
     await modal.present();
   }
 
+  async refresh(event) {
+    await this.ticker();
+    event.target.complete();
+  }
+
   async ticker() {
     if (this._contracts._isInit) {
-
+      if (this._chain !== 'AVAX') {
+        this._repRequirements = await this._contracts.getReputationLevelRequirements();
+      }
       this._chain = await this._contracts.getChain();
       this._currentCurrency = await this._contracts.getCurrency();
       this._names = (await this._storage.get('names')) || {};
@@ -117,9 +115,8 @@ export class AccountPage implements OnInit {
         ),
       };
       this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
-    }
-    if (!this._isDestroyed) {
-      setTimeout(() => this.ticker(), 5000);
+    } else {
+      setTimeout(async () => this.ticker, 2000);
     }
   }
 
@@ -147,7 +144,6 @@ export class AccountPage implements OnInit {
 
   async showMenu(address) {
     const actionSheet = await this._action.create({
-      header: 'Menu',
       cssClass: 'my-custom-class',
       buttons: [{
         text: 'Rename',
@@ -179,5 +175,25 @@ export class AccountPage implements OnInit {
       }]
     });
     await actionSheet.present();
+  }
+
+  async getDataToFile(fileName) {
+    const a = {
+      accounts: await this._storage.get('accounts'),
+      names: await this._storage.get('names'),
+      currency: await this._storage.get('currency'),
+      network: await this._storage.get('network')
+    };
+    const textToSave = JSON.stringify(a);
+    const textToSaveAsBlob = new Blob([textToSave], {
+        type: 'text/plain'
+    });
+
+    console.log(fileName, textToSave);
+
+}
+
+  async exportData() {
+    await this.getDataToFile(`CBTracker-${new Date().getTime()}.json`);
   }
 }

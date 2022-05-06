@@ -4,21 +4,23 @@
       <h3>ADD ACCOUNT</h3>
     </ion-col>
     <ion-col size="12">
-      <ion-input placeholder="Account Name" [(ngModel)]="_name"></ion-input>
+      <div>
+        <ion-input placeholder="Account Name" [(ngModel)]="_name"></ion-input>
+      </div>
     </ion-col>
     <ion-col size="12">
-      <ion-input placeholder="Wallet Address" [(ngModel)]="_address"></ion-input>
+      <div>
+        <ion-input
+          placeholder="Wallet Address"
+          [(ngModel)]="_address"
+        ></ion-input>
+      </div>
     </ion-col>
     <ion-col size="12">
-      <button class="add-btn" (click)="addAccount()">
-        Add
-      </button>
+      <button class="add-btn" (click)="addAccount()">Add</button>
     </ion-col>
   </ion-row>
   <div id="close" (click)="closeModal()">
-     <span id="close"></span>
+    <span id="close"></span>
   </div>
 </div>
-
-
-

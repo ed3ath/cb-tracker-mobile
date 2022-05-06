@@ -141,7 +141,7 @@ export class UtilsService {
   currencyFormat(value: number, currency = 'USD') {
     return value.toLocaleString('en-US', {
       style: 'currency',
-      currency,
+      currency: currency.toUpperCase(),
     });
   }
 
@@ -343,6 +343,57 @@ export class UtilsService {
 
   getCharacterPowerByLevel(level) {
     return (1000 + level * 10) * (Math.floor(level / 10) + 1);
+  }
+
+  getAlignedCharacterPower(charData, weapData) {
+    const playerElement = parseInt(charData.trait, 10);
+    const weaponMultiplier = this.GetTotalMultiplierForTrait(weapData, playerElement);
+    return charData.power * weaponMultiplier + weapData.bonusPower;
+  }
+
+  getElementAdvantage(playerElement, enemyElement) {
+    if ((playerElement + 1) % 4 === enemyElement) {return 1;}
+    if ((enemyElement + 1) % 4 === playerElement) {return -1;}
+    return 0;
+  }
+
+  AdjustStatForTrait(statValue, statTrait, charTrait) {
+    let value = statValue;
+    if (statTrait === charTrait) {value = Math.floor(value * 1.07);}
+    else if (statTrait === this.WeaponTrait.PWR) {value = Math.floor(value * 1.03);}
+    return value;
+  }
+
+  MultiplierPerEffectiveStat(statValue) {
+    return statValue * 0.25;
+  }
+
+  Stat1PercentForChar(wep, trait) {
+    return this.MultiplierPerEffectiveStat(
+      this.AdjustStatForTrait(wep.stat1Value, wep.stat1Type, trait)
+    );
+  }
+
+  Stat2PercentForChar(wep, trait) {
+    return this.MultiplierPerEffectiveStat(
+      this.AdjustStatForTrait(wep.stat2Value, wep.stat2Type, trait)
+    );
+  }
+
+  Stat3PercentForChar(wep, trait) {
+    return this.MultiplierPerEffectiveStat(
+      this.AdjustStatForTrait(wep.stat3Value, wep.stat3Type, trait)
+    );
+  }
+
+  GetTotalMultiplierForTrait(wep, trait) {
+    return (
+      1 +
+      0.01 *
+        (this.Stat1PercentForChar(wep, trait) +
+        this.Stat2PercentForChar(wep, trait) +
+        this.Stat3PercentForChar(wep, trait))
+    );
   }
 
   async displayToaster(message) {

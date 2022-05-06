@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -8,13 +8,14 @@ import { UtilsService } from 'src/app/services/utils.service';
   templateUrl: 'options.page.html',
   styleUrls: ['options.page.scss'],
 })
-export class OptionsPage implements OnInit {
+export class OptionsPage {
   _currencies: any;
   _currentCurrency: string;
   _chain: string;
+  _notifications: boolean;
 
   public headerBg = '../../assets/dungeon.jpg';
-  public headerTitle = 'DIAGNOSTIC';
+  public headerTitle = 'OPTIONS';
 
   constructor(
     private _contracts: ContractService,
@@ -41,14 +42,16 @@ export class OptionsPage implements OnInit {
       'vnd',
     ];
   }
-  async ngOnInit() {
+  async ionViewDidEnter() {
     this._chain = await this._contracts.getChain();
     this._currentCurrency = await this._contracts.getCurrency();
+    this._notifications = true;
   }
 
   async saveOptions() {
     await this._contracts.setChain(this._chain);
     await this._contracts.setCurrency(this._currentCurrency);
     this._utils.displayToaster('Changes saved.');
+
   }
 }
