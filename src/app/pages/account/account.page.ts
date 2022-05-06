@@ -47,6 +47,7 @@ export class AccountPage {
     this._accounts = (await this._storage.get('accounts')) || [];
     this._chain = '';
     this._currentCurrency = 'USD';
+    this.isLoading = true;
     await this.ticker();
   }
 
@@ -71,6 +72,7 @@ export class AccountPage {
   }
 
   async refresh(event) {
+    this.isLoading = true;
     await this.ticker();
     event.target.complete();
   }
@@ -118,6 +120,8 @@ export class AccountPage {
     } else {
       setTimeout(async () => this.ticker, 2000);
     }
+
+    this.isLoading = false;
   }
 
   artsGenerator(character) {
