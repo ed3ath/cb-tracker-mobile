@@ -1,0 +1,18 @@
+ion-skeleton-text{
+  // --background: var(--ion-color-secondary);
+  --background-rgb: var(--ion-bg-color-rgb);
+}
+
+.custom-skeleton ion-list ion-item{
+  --background: var(--ion-color-primary);
+}
+
+.custom-skeleton{
+  background-color: var(--ion-color-primary);
+  ion-list{
+    background-color: var(--ion-color-primary);
+    ion-item{
+      --border-color: var(--ion-color-primary);
+    }
+  }
+}

@@ -14,7 +14,6 @@ ion-header {
 }
 
 ion-content{
-  --offset-top: 50%;
   ion-header {
     ion-toolbar{
       padding: 0px;
@@ -59,7 +58,8 @@ ion-grid{
       button{
         width: 100%;
         padding: 17px 10px;
-        font-size: 14px;
+        font-size: 4vw;
+        white-space: nowrap;
         text-overflow: ellipsis;
         background-color: var(--ion-color-primary);
         border: 1px solid var(--ion-color-secondary);
@@ -169,6 +169,21 @@ ion-grid{
                   }
                 }
               }
+
+              ion-col#exp{
+                // health bar background gray
+                div{
+                  height: 5px;
+                  width: 100%;
+                  background-color: var(--ion-color-danger-shade);
+                  div{
+                    position: absolute;
+                    width: 80%;
+                    height: 5px;
+                    background-color: var(--ion-color-secondary);
+                  }
+                }
+              }
             }
           }
         }
@@ -176,7 +191,6 @@ ion-grid{
     }
   }
 }
-
 
 
 ion-item#staked-details{
@@ -291,6 +305,7 @@ ion-header#header-inner {
   text-decoration: none;
 }
 
+
 ion-accordion.accordion-expanding ion-item[slot="header"],
 ion-accordion.accordion-expanded ion-item[slot="header"]{
   --background: var(--ion-color-primary);
@@ -304,10 +319,37 @@ div{
   }
 }
 
+ion-accordion.accordion-collapse [slot="content"],
+ion-accordion.accordion-collapsing [slot="content"],
 ion-accordion.accordion-expanding [slot="content"],
 ion-accordion.accordion-expanded [slot="content"]{
   --ion-item-background: var(--ion-color-primary);
   --ion-item-color:#fff;
+}
+
+.sword{
+  content: url('../../../assets/accounts/sword.svg');
+  height: 0.8em;
+  width: 0.8em;
+}
+
+ion-accordion-group{
+  ion-accordion{
+    ion-item{
+      &:nth-child(1){
+        border-top: 1px solid rgb(78, 78, 78);
+      }
+      &:nth-child(n+1){
+        border-bottom: 1px solid rgb(77, 77, 77);
+      }
+      --padding-top: 0.3em;
+      --padding-bottom: 0.3em;
+      button{
+        background-color: var(--ion-color-primary);
+        color: var(#fff);
+      }
+    }
+  }
 }
 
 
@@ -335,5 +377,85 @@ ion-footer{
         }
       }
     }
+  }
+}
+
+#sword-loading{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  span{
+    margin: 20px;
+  }
+
+  #sword-loader{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+  }
+  #sword-loader2{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+    animation-delay: 0.5s;
+  }
+  #sword-loader3{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+    animation-delay: 1s;
+  }
+}
+
+ion-skeleton-text{
+  // --background: var(--ion-color-secondary);
+  --background-rgb: var(--ion-bg-color-rgb);
+}
+
+.custom-skeleton ion-list ion-item{
+  --background: var(--ion-color-primary);
+}
+
+.custom-skeleton{
+  background-color: var(--ion-color-primary);
+  ion-list{
+    background-color: var(--ion-color-primary);
+    ion-item{
+      --border-color: var(--ion-color-primary);
+    }
+  }
+}
+
+@keyframes rotateClockwise {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    opacity: 0.5;
+    height: 5%;
+    width: 5%;
+  }
+  50%{
+    height: 10%;
+    width: 10%;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    opacity: 1;
+    opacity: 0.5;
+    height: 5%;
+    width: 5%;
   }
 }

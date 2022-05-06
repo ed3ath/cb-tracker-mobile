@@ -3,7 +3,6 @@ div#modal-content{
   border: 1px solid var(--ion-color-primary-tint);
   border-radius: 5px;
   width: 85vw;
-  height: 42vh;
   margin:auto;
   padding: 20px 30px;
 
@@ -43,7 +42,7 @@ div#modal-content{
 }
 
 div#close{
-  margin-top: 70px;
+  margin-top: 30px;
   color: #fff;
   text-align: center;
   span{

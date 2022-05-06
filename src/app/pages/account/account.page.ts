@@ -13,12 +13,13 @@ import { ImportModalComponent } from 'src/app/modals/account/import.modal';
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss'],
 })
+
 export class AccountPage {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
   public headerBg = '../../assets/dungeon.jpg';
   public headerTitle = 'ACCOUNTS';
-
+  isLoading = false;
 
   _chain: string;
   _currentCurrency: string;
@@ -48,6 +49,7 @@ export class AccountPage {
     this._chain = '';
     this._currentCurrency = 'USD';
     await this.ticker();
+    this.isLoading = false;
   }
 
   closeAccordion() {
@@ -74,9 +76,12 @@ export class AccountPage {
     console.log('refreshing');
     await this.ticker();
     event.target.complete();
+    this.isLoading = false;
   }
 
   async ticker() {
+    this.isLoading = true;
+
     if (this._chain !== 'AVAX') {
       this._repRequirements = await this._contracts.getReputationLevelRequirements();
     }
@@ -139,33 +144,38 @@ export class AccountPage {
     return Number(targetExp) - (Number(currentExp) + Number(rewardExp));
   }
 
-  async showMenu(address) {
+  async showMenu(address, event) {
+    event.stopPropagation();
     const actionSheet = await this._action.create({
       cssClass: 'my-custom-class',
       buttons: [{
         text: 'Rename',
+        cssClass: 'actionSheetIcon',
         handler: () => {
           console.log(address);
         }
       }, {
         text: 'Combat Simulator',
+        cssClass: 'actionSheetIcon',
         handler: () => {
           console.log(address);
         }
       }, {
         text: 'Fight Logs',
+        cssClass: 'actionSheetIcon',
         handler: () => {
           console.log(address);
         }
       }, {
         text: 'Delete',
+        cssClass: 'actionSheetIcon',
         handler: () => {
           console.log(address);
         }
       }, {
         text: 'Cancel',
-        icon: 'close',
         role: 'cancel',
+        cssClass: 'actionSheetIcon',
         handler: () => {
           console.log('Cancel clicked');
         }

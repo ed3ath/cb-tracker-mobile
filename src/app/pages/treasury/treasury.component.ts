@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class TreasuryComponent implements OnInit {
 
   public headerBg = '../../assets/dungeon.jpg';
-  public headerTitle = 'TREASURY INFORMATION';
+  public headerTitle = 'TREASURY';
 
   constructor() { }
 
