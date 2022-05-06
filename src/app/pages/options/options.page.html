@@ -3,7 +3,7 @@
   <ion-item>
     <ion-label>Select Chain</ion-label>
     <ion-select placeholder="Select Network" [(ngModel)]="_chain">
-      <ion-select-option value="BNB">Binance</ion-select-option>
+      <ion-select-option value="BSC">Binance Smart Chain</ion-select-option>
       <ion-select-option value="HECO">HECO Chain</ion-select-option>
       <ion-select-option value="OEC">OKEx Chain</ion-select-option>
       <ion-select-option value="POLYGON">Polygon</ion-select-option>
@@ -16,6 +16,10 @@
     <ion-select placeholder="Select Currency" [(ngModel)]="_currentCurrency">
       <ion-select-option *ngFor="let cur of _currencies" [value]="cur">{{cur.toUpperCase()}}</ion-select-option>
     </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Receive Notifications</ion-label>
+    <ion-toggle color="secondary" [(ngModel)]="_notifications"></ion-toggle>
   </ion-item>
   <button (click)="saveOptions()">Save</button>
 </ion-content>

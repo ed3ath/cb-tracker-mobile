@@ -24,8 +24,8 @@ const routes: Routes = [
         loadChildren: () => import('../pages/calculator/calculator.module').then(m => m.CalculatorPageModule)
       },
       {
-        path: 'stats',
-        loadChildren: () => import('../pages/stats/stats.module').then(m => m.StatsModule)
+        path: 'treasury',
+        loadChildren: () => import('../pages/treasury/treasury.module').then(m => m.TreasuryModule)
       },
       {
         path: 'options',

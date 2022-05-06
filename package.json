@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "update": "node scripts/abi-updater.js",
+    "update": "node scripts/abi-updater.js && node scripts/config-updater.js",
     "test:android": "ionic cordova run android"
   },
   "private": true,

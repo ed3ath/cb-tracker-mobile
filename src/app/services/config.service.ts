@@ -16,7 +16,7 @@ export class ConfigService {
     const env = 'production';
     let chain = (await this._storage.get('network'));
     if (!chain) {
-      chain = 'BNB';
+      chain = 'BSC';
       await this._storage.set('network', chain);
     }
     this._config = {...config.environments[env].chains[chain], ...extra[chain]};

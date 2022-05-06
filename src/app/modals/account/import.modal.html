@@ -4,7 +4,7 @@
       <h3>IMPORT DATA</h3>
     </ion-col>
     <ion-col size="12">
-      <ion-input type='file' [(ngModel)]="_data"></ion-input>
+      <ion-input type='file' accept="application/json" (change)="changeFile($event)"></ion-input>
     </ion-col>
     <ion-col size="12">
       <button class="add-btn" (click)="importData()">
