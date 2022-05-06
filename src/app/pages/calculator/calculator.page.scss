@@ -143,6 +143,28 @@ ion-grid{
           margin-bottom: 0px;
         }
       }
+      ion-input{
+        border: 1px solid var(--ion-color-primary-tint);
+        --padding-top: 18px;
+        --padding-end: 15px;
+        --padding-start: 15px;
+        --padding-bottom: 18px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: 400;
+        font-style: Roboto;
+      }
+      button{
+        width: 100%;
+        padding: 18px;
+        text-align: center;
+        border: 1px solid var(--ion-color-secondary);
+        color: var(--ion-color-secondary);
+        font-family: Roboto;
+        background-color: var(--ion-color-primary);
+        border-radius: 5px;
+        font-size: 17px;
+      }
     }
   }
 }

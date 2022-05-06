@@ -40,13 +40,13 @@
         <ion-icon [src]="activeTab ==='calculator' ? '../../assets/active-calculator.svg' : '../../assets/calculator.svg'"></ion-icon>
         <ion-label [style]="activeTab ==='calculator' ? 'color:#fff' : 'color:#7F8693'">Rewards Calculator</ion-label>
       </ion-item>
-      <ion-item (click)="navigateTo('stats')">
-        <ion-icon [src]="activeTab ==='stats' ? '../../assets/active-chart.svg' : '../../assets/pie-graph.svg'"></ion-icon>
-        <ion-label [style]="activeTab ==='stats' ? 'color:#fff' : 'color:#7F8693'">Cryptoblades Stats</ion-label>
+      <ion-item (click)="navigateTo('treasury')">
+        <ion-icon [src]="activeTab ==='treasury' ? '../../assets/active-chart.svg' : '../../assets/pie-graph.svg'"></ion-icon>
+        <ion-label [style]="activeTab ==='treasury' ? 'color:#fff' : 'color:#7F8693'">Treasury Information</ion-label>
       </ion-item>
       <ion-item (click)="navigateTo('options')">
         <ion-icon [src]="activeTab ==='options' ? '../../assets/active-tools.svg' : '../../assets/settings.svg'"></ion-icon>
-        <ion-label [style]="activeTab ==='options' ? 'color:#fff' : 'color:#7F8693'">Diagnostic</ion-label>
+        <ion-label [style]="activeTab ==='options' ? 'color:#fff' : 'color:#7F8693'">Options</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>

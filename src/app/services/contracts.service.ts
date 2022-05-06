@@ -361,6 +361,26 @@ export class ContractService {
     return weapons;
   }
 
+  async getCharacterData(charId) {
+    const contract = this.getContract('characters');
+    return this._utils.characterFromContract(charId, await contract.methods.get(charId).call());
+  }
+
+  async getWeaponData(weapId) {
+    const contract = this.getContract('weapons');
+    return this._utils.weaponFromContract(weapId, await contract.methods.get(weapId).call());
+  }
+
+  async getTargets(charId, weapId) {
+    const contract = this.getContract('cryptoblades');
+    return await contract.methods.getTargets(charId, weapId).call();
+  }
+
+  async getCharacterPower(charId) {
+    const contract = this.getContract('characters');
+    return parseInt(await contract.methods.getTotalPower(charId).call(), 10);
+  }
+
   async getCharactersData(charIds) {
     const chain = await this.getChain();
     const charactersAddress = await this.getContract('cryptoblades')
@@ -456,5 +476,10 @@ export class ContractService {
     } else {
       return this._utils.ReputationTier.KING;
     }
+  }
+
+  async getTokenGainForFight(power, flag = false) {
+    const contract = this.getContract('cryptoblades');
+    return await contract.methods.getTokenGainForFight(power, flag).call();
   }
 }

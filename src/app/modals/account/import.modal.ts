@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
@@ -9,12 +9,10 @@ import { UtilsService } from 'src/app/services/utils.service';
   templateUrl: './import.modal.html',
   styleUrls: ['./import.modal.scss'],
 })
-export class ImportModalComponent implements OnInit {
+export class ImportModalComponent {
   _file: any;
 
   constructor(private _modalCtrl: ModalController, private _storage: Storage, private _utils: UtilsService) {}
-
-  async ngOnInit() {}
 
   closeModal() {
     this._modalCtrl.dismiss();

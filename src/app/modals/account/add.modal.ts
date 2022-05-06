@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import web3Utils from 'web3-utils';
@@ -9,7 +9,7 @@ import { UtilsService } from 'src/app/services/utils.service';
   templateUrl: './add.modal.html',
   styleUrls: ['./add.modal.scss'],
 })
-export class AddModalComponent implements OnInit {
+export class AddModalComponent {
   _name: string;
   _address: string;
   _accounts: string[];
@@ -21,7 +21,7 @@ export class AddModalComponent implements OnInit {
     private _utils: UtilsService,
   ) {}
 
-  async ngOnInit() {
+  async ionViewDidEnter() {
     this._accounts = (await this._storage.get('accounts')) || [];
     this._names = (await this._storage.get('names')) || {};
   }
