@@ -44,6 +44,12 @@ export class DashboardPage {
     await this.ticker();
   }
 
+  async refresh(event) {
+    console.log('refreshing');
+    await this.ticker();
+    event.target.complete();
+  }
+
   async ticker() {
     await this._contracts.skillPriceTicker();
 

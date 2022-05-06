@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { SplashPage } from '../pages/splash/splash.page';
 
 const routes: Routes = [
+  {
+    path: 'splash',
+    component: SplashPage
+  },
   {
     path: 'tabs',
     component: TabsPage,
     children: [
-      {
-        path: 'splash',
-        loadChildren: () => import('../pages/splash/splash.module').then(m => m.SplashPageModule)
-      },
       {
         path: 'dashboard',
         loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardPageModule)
@@ -33,14 +34,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/splash',
+        redirectTo: 'splash',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/splash',
+    redirectTo: '/splash',
     pathMatch: 'full'
   }
 ];

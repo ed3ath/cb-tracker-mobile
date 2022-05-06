@@ -1,5 +1,8 @@
 <app-header [headerTitle]="headerTitle" [subHeaderBg]="headerBg"></app-header>
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div id="container">
 
     <ion-grid id="accounts">
@@ -18,153 +21,150 @@
       <app-loader *ngIf="isLoading"></app-loader>
       <ion-row *ngIf="!isLoading">
         <ion-col size="12">
-            <ion-accordion-group *ngIf="_gasBalances && _skillAssets && _skillPrice">
-              <!-- add unique identifier in the accordion value to trigger accordions separately -->
-              <ion-accordion toggle-icon-slot="start" toggle-icon="../../assets/accounts/arrow.svg" *ngFor="let _account of _accounts; let i = index">
-                <ion-item slot="header">
-                  <ion-label>{{_names[_account]}}</ion-label>
-                  <div>
-                    <ion-icon src="../../../assets/accounts/checkbox.svg"></ion-icon>
-                    <ion-icon src="../../../assets/accounts/sword.svg"></ion-icon>
-                    <ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon>
-                    <ion-icon src="../../../assets/accounts/trash.svg"></ion-icon>
-                  </div>
+          <ion-accordion-group *ngIf="_gasBalances && _skillAssets && _skillPrice">
+            <!-- add unique identifier in the accordion value to trigger accordions separately -->
+            <ion-accordion toggle-icon-slot="start" toggle-icon="../../assets/accounts/arrow.svg" *ngFor="let _account of _accounts; let i = index">
+              <ion-item slot="header">
+                <ion-label>{{_names[_account]}}</ion-label>
+                <div>
+                  <button (click)="showMenu(_address)"><ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon></button>
+                </div>
+              </ion-item>
+              <ion-list slot="content">
+                <ion-item>
+                  <ion-row id="content-account">
+                    <ion-col size="6">
+                      <div>
+                        <span>Address</span>
+                        <h3>{{_utils.addressPrivacy(_account)}}</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>{{_gasName}} Balance</span>
+                        <h3>{{_utils.formatNumber(_gasBalances[i], 4)}} ({{_utils.currencyFormat(_gasBalances[i] * _gasPrice, _currentCurrency)}})</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Unclaimed</span>
+                        <h3>{{_utils.formatNumber(_skillAssets.unclaimed[i], 4)}} ({{_utils.currencyFormat(_skillAssets.unclaimed[i] * _skillPrice, _currentCurrency)}})</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Claimable</span>
+                        <h3>{{_utils.formatNumber(_skillAssets.claimable[i], 4)}} ({{_utils.currencyFormat(_skillAssets.claimable[i] * _skillPrice, _currentCurrency)}})</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Staked</span>
+                        <h3>{{_utils.formatNumber(_skillAssets.staked[i], 4)}} ({{_utils.currencyFormat(_skillAssets.staked[i] * _skillPrice, _currentCurrency)}})</h3>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div>
+                        <span>Wallet</span>
+                        <h3>{{_utils.formatNumber(_skillAssets.wallet[i], 4)}} ({{_utils.currencyFormat(_skillAssets.wallet[i] * _skillPrice, _currentCurrency)}})</h3>
+                      </div>
+                    </ion-col>
+                  </ion-row>
                 </ion-item>
-                <ion-list slot="content">
-                  <ion-item>
-                    <ion-row id="content-account">
-                      <ion-col size="6">
-                        <div>
-                          <span>Address</span>
-                          <h3>{{_utils.addressPrivacy(_account)}}</h3>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6">
-                        <div>
-                          <span>{{_gasName}} Balance</span>
-                          <h3>{{_utils.formatNumber(_gasBalances[i], 4)}} ({{_utils.currencyFormat(_gasBalances[i] * _gasPrice, _currentCurrency)}})</h3>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6">
-                        <div>
-                          <span>Unclaimed</span>
-                          <h3>{{_utils.formatNumber(_skillAssets.unclaimed[i], 4)}} ({{_utils.currencyFormat(_skillAssets.unclaimed[i] * _skillPrice, _currentCurrency)}})</h3>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6">
-                        <div>
-                          <span>Claimable</span>
-                          <h3>{{_utils.formatNumber(_skillAssets.claimable[i], 4)}} ({{_utils.currencyFormat(_skillAssets.claimable[i] * _skillPrice, _currentCurrency)}})</h3>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6">
-                        <div>
-                          <span>Staked</span>
-                          <h3>{{_utils.formatNumber(_skillAssets.staked[i], 4)}} ({{_utils.currencyFormat(_skillAssets.staked[i] * _skillPrice, _currentCurrency)}})</h3>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6">
-                        <div>
-                          <span>Wallet</span>
-                          <h3>{{_utils.formatNumber(_skillAssets.wallet[i], 4)}} ({{_utils.currencyFormat(_skillAssets.wallet[i] * _skillPrice, _currentCurrency)}})</h3>
-                        </div>
-                      </ion-col>
-                    </ion-row>
-                  </ion-item>
-                  <ion-item *ngIf="_charIds && _characters">
-                    <ion-row id="characters-account">
+                <ion-item *ngIf="_charIds && _characters">
+                  <ion-row id="characters-account">
 
-                      <!-- you can loop here -->
-                      <ion-col size="12" class="card-wrapper" *ngFor="let _charId of _charIds[i]; let _charIndex = index;">
-                        <ion-row id="inner-wrap">
-                          <ion-col size="4">
-                            <ion-img [src]="artsGenerator(_charId)"></ion-img>
-                          </ion-col>
-                          <ion-col size="8">
-                            <h5>{{_utils.getCharacterNameFromSeed(_charId)}}</h5>
-                            <ion-row class="ion-justify-content-start">
-                              <ion-col size="1">
-                                <span [class]="_characters[i].charsData[_charIndex].traitName.toLowerCase()"></span>
+                    <!-- you can loop here -->
+                    <ion-col size="12" class="card-wrapper" *ngFor="let _charId of _charIds[i]; let _charIndex = index;">
+                      <ion-row id="inner-wrap">
+                        <ion-col size="4">
+                          <ion-img [src]="artsGenerator(_charId)"></ion-img>
+                        </ion-col>
+                        <ion-col size="8">
+                          <h5>{{_utils.getCharacterNameFromSeed(_charId)}}</h5>
+                          <ion-row class="ion-justify-content-start">
+                            <ion-col size="1">
+                              <span [class]="_characters[i].charsData[_charIndex].traitName.toLowerCase()"></span>
+                            </ion-col>
+                            <ion-col size="11" id="lvl">
+                              <!-- // -->
+                              <span>LVL: {{_characters[i].charsData[_charIndex].level + 1}} / Rank: {{(_characters[i].charsRep && _repRequirements ? _utils.reputationToTier(_contracts.getReputationTier(_characters[i].charsRep[_charIndex][0][2], _repRequirements)) : 'PEASANT')}}</span>
+                            </ion-col>
+                          </ion-row>
+                          <div>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Power</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>{{_utils.formatNumber(_characters[i].charsPower[_charIndex], 0)}} / {{_utils.formatNumber(_utils.getCharacterPowerByLevel(_characters[i].charsData[_charIndex].level) * 4, 0)}}</span>
+                                  </ion-col>
+                                </ion-row>
                               </ion-col>
-                              <ion-col size="11" id="lvl">
-                                <!-- // -->
-                                <span>LVL: {{_characters[i].charsData[_charIndex].level + 1}} / Rank: {{(_characters[i].charsRep && _repRequirements ? _utils.reputationToTier(_contracts.getReputationTier(_characters[i].charsRep[_charIndex][0][2], _repRequirements)) : 'PEASANT')}}</span>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character power -->
+                                  <div [style.width]="getPercentage(_characters[i].charsPower[_charIndex], _utils.getCharacterPowerByLevel(_characters[i].charsData[_charIndex].level) * 4)"></div>
+                                </div>
                               </ion-col>
                             </ion-row>
-                            <div>
-                              <ion-row>
-                                <ion-col size="12">
-                                  <ion-row class="ion-justify-content-between">
-                                    <ion-col>
-                                      <span>Power</span>
-                                    </ion-col>
-                                    <ion-col>
-                                      <span>{{_utils.formatNumber(_characters[i].charsPower[_charIndex], 0)}} / {{_utils.formatNumber(_utils.getCharacterPowerByLevel(_characters[i].charsData[_charIndex].level) * 4, 0)}}</span>
-                                    </ion-col>
-                                  </ion-row>
-                                </ion-col>
-                                <ion-col id="stamina">
-                                  <div>
-                                    <!-- // to adjust the width percentage for the character power -->
-                                    <div [style.width]="getPercentage(_characters[i].charsPower[_charIndex], _utils.getCharacterPowerByLevel(_characters[i].charsData[_charIndex].level) * 4)"></div>
-                                  </div>
-                                </ion-col>
-                              </ion-row>
-                              <ion-row *ngIf="_utils.getNextTargetExpLevel(_characters[i].charsData[_charIndex].level) as _nextTarget">
-                                <ion-col size="12">
-                                  <ion-row class="ion-justify-content-between">
-                                    <ion-col>
-                                      <span>Target Level {{_nextTarget.level + 1}}</span>
-                                    </ion-col>
-                                    <ion-col>
-                                      <span>({{_utils.formatNumber(getExpLeft(_nextTarget.exp, _characters[i].charsExp[_charIndex], _characters[i].charsData[_charIndex].xp), 0)}} xp left)</span>
-                                    </ion-col>
-                                  </ion-row>
-                                </ion-col>
-                                <ion-col id="stamina">
-                                  <div>
-                                    <!-- // to adjust the width percentage for the character xp progress -->
-                                    <div [style.width]="getPercentage(getExpLeft(_nextTarget.exp, _characters[i].charsExp[_charIndex], _characters[i].charsData[_charIndex].xp), _nextTarget.exp)"></div>
-                                  </div>
-                                </ion-col>
-                              </ion-row>
-                              <ion-row>
-                                <ion-col size="12">
-                                  <ion-row class="ion-justify-content-between">
-                                    <ion-col>
-                                      <span>Stamina</span>
-                                    </ion-col>
-                                    <ion-col>
-                                      <span>{{_characters[i].charsSta[_charIndex]}} / 200</span>
-                                    </ion-col>
-                                  </ion-row>
-                                </ion-col>
-                                <ion-col id="stamina">
-                                  <div>
-                                    <!-- // to adjust the width percentage for the character stamina -->
-                                    <div [style.width]="getPercentage(_characters[i].charsSta[_charIndex], 200)"></div>
-                                  </div>
-                                </ion-col>
-                              </ion-row>
-                              <ion-row>
-                                <ion-col size="12">
-                                  <ion-row class="ion-justify-content-between">
-                                    <ion-col>
-                                      <span>ID#: {{_charId}}</span>
-                                    </ion-col>
-                                  </ion-row>
-                                </ion-col>
-                              </ion-row>
-                            </div>
-                          </ion-col>
-                        </ion-row>
-                      </ion-col>
+                            <ion-row *ngIf="_utils.getNextTargetExpLevel(_characters[i].charsData[_charIndex].level) as _nextTarget">
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Target Level {{_nextTarget.level + 1}}</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>({{_utils.formatNumber(getExpLeft(_nextTarget.exp, _characters[i].charsExp[_charIndex], _characters[i].charsData[_charIndex].xp), 0)}} xp left)</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character xp progress -->
+                                  <div [style.width]="getPercentage(getExpLeft(_nextTarget.exp, _characters[i].charsExp[_charIndex], _characters[i].charsData[_charIndex].xp), _nextTarget.exp)"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>Stamina</span>
+                                  </ion-col>
+                                  <ion-col>
+                                    <span>{{_characters[i].charsSta[_charIndex]}} / 200</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                              <ion-col id="stamina">
+                                <div>
+                                  <!-- // to adjust the width percentage for the character stamina -->
+                                  <div [style.width]="getPercentage(_characters[i].charsSta[_charIndex], 200)"></div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-row class="ion-justify-content-between">
+                                  <ion-col>
+                                    <span>ID#: {{_charId}}</span>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
 
-                    </ion-row >
-                  </ion-item>
-                </ion-list>
-              </ion-accordion>
-            </ion-accordion-group>
+                  </ion-row >
+                </ion-item>
+              </ion-list>
+            </ion-accordion>
+          </ion-accordion-group>
         </ion-col>
       </ion-row>
     </ion-grid>

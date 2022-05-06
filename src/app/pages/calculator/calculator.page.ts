@@ -22,12 +22,14 @@ export class CalculatorPage {
     private _contracts: ContractService,
     private _utils: UtilsService
   ) {
-    this._daily = [];
-    this._weekly = [];
-    this._monthly = [];
+    this.cleanVariables();
   }
 
   async ionViewDidLeave() {
+    this.cleanVariables();
+  }
+
+  cleanVariables() {
     this._daily = [];
     this._weekly = [];
     this._monthly = [];
@@ -94,6 +96,8 @@ export class CalculatorPage {
         minExp = exp;
       }
     });
+
+    this.cleanVariables();
 
     for (let i = 7; i > 0; i--) {
       this._daily.push({
