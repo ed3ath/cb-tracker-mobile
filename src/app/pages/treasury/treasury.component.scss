@@ -35,6 +35,7 @@ ion-content{
 
 ion-grid#dashboard{
   padding: 0px;
+  padding-top: 2em;
 }
 
 ion-content{
@@ -51,26 +52,110 @@ ion-grid{
       div{
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 25px 10px;
+        justify-content:left;
+        padding: 10px 10px;
         border: 1px solid var(--ion-color-primary-tint);
         border-radius: 5px;
-        span{
-          color: var(--ion-color-secondary);
-          font-size: 13px;
-          font-weight: 400;
-          font-family: Roboto;
-        }
-        h3{
-          color: var(--ion-color-primary-contrast);
-          font-weight: 500;
-          font-family: Roboto;
-          margin-top: 10px;
-          margin-bottom: 0px;
+        ion-row{
+          padding-right: 0px;
+          ion-col{
+            padding-left: 0px;
+            #king-icon{
+              content: url('../../../assets/accounts/king.png');
+              height: 4.5em;
+              width: 4.5em;
+            }
+
+            &:nth-child(2){
+              ion-row{
+                ion-col{
+                  border: none;
+                  &:nth-child(1){
+                    border-bottom: 1px solid rgb(56, 56, 56);
+                    padding-left: 0px;
+                    p#main-title{
+                      font-size: 1em;
+                      color: var(--ion-color-secondary);
+                    }
+                    p#sub-title{
+                      font-size: 0.8em;
+                      color: var(--ion-color-primary-shade);
+                    }
+                  }
+                  text-align: left;
+                  &:nth-child(2){
+                    border: none;
+                    padding: 0px;
+                    font-family: Roboto;
+                    p#king{
+                      margin-top: 1em;
+                      margin-bottom: 0.6em;
+                      color: var(--ion-color-secondary);
+                      span{
+                        color: #fff;
+                      }
+                    }
+                    ion-row{
+                      padding: 0px;
+                      ion-col{
+                        padding: 5px;
+                        border: none;
+                        div{
+                          p#skill-king{
+                            font-size: 12px;
+                          }
+                          span{
+                            font-size: 13px;
+                            color: #fff;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
+  }
+}
+
+ion-col#progress-bar{
+  border-bottom: 1px solid var(--ion-color-primary-tint);
+  padding-bottom: 1.5em;
+  padding-left: 5px;
+  div{
+    border: none;
+    padding: 0px;
+    border-radius: 10px;
+  }
+  span{
+    border-radius: 10px;
+    height: 7px;
+    width: 100%;
+    border: 1px solid var(--ion-color-primary-tint);
+    span{
+      height: 8px;
+      position: absolute;
+      background-color: var(--ion-color-secondary);
+    }
+  }
+  p#claimable{
+    font-size: 0.7em;
+    text-align: center;
+    margin-top: 5px;
+    font-family: Roboto;
+  }
+}
+
+ion-col#king-description{
+  padding-top: 1em;
+  p#description{
+    font-size: 0.7em;
+    line-height: 1.5em;
+    text-align: justify;
   }
 }
 
@@ -111,11 +196,6 @@ ion-header#header-inner {
 
 #container {
   text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 46.5%;
-  transform: translateY(-50%);
 }
 
 #container strong {

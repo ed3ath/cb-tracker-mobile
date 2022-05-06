@@ -1,10 +1,6 @@
 <app-header [headerTitle]="headerTitle" [subHeaderBg]="headerBg"></app-header>
 <ion-content [fullscreen]="true">
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
   <div id="container">
-
     <ion-grid id="accounts">
       <ion-row id="btn-account">
         <ion-col size="4">
@@ -17,21 +13,30 @@
           <button (click)="exportData()">Export</button>
         </ion-col>
       </ion-row>
-
+      <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-img src="../../../assets/sword-loader.svg"></ion-img>
+        <!-- <ion-refresher-content
+          pullingIcon="../../../assets/sword-loader.svg"
+          pullingText="Pull to refresh"
+          refreshingSpinner="../../../assets/sword-loader.svg"
+          refreshingText="Refreshing...">
+        </ion-refresher-content> -->
+      </ion-refresher>
       <app-loader *ngIf="isLoading"></app-loader>
       <ion-row *ngIf="!isLoading">
         <ion-col size="12">
           <ion-accordion-group *ngIf="_gasBalances && _skillAssets && _skillPrice">
             <!-- add unique identifier in the accordion value to trigger accordions separately -->
             <ion-accordion toggle-icon-slot="start" toggle-icon="../../assets/accounts/arrow.svg" *ngFor="let _account of _accounts; let i = index">
-              <ion-item slot="header">
+              <ion-item slot="header" lines="none">
                 <ion-label>{{_names[_account]}}</ion-label>
                 <div>
-                  <button (click)="showMenu(_address)"><ion-icon src="../../../assets/accounts/checklist.svg"></ion-icon></button>
+                  <span class="sword"></span>
+                  <button (click)="showMenu(_address, $event)"><ion-icon src="../../../assets/accounts/menu.svg"></ion-icon></button>
                 </div>
               </ion-item>
               <ion-list slot="content">
-                <ion-item>
+                <ion-item lines="none">
                   <ion-row id="content-account">
                     <ion-col size="6">
                       <div>
@@ -121,7 +126,7 @@
                                   </ion-col>
                                 </ion-row>
                               </ion-col>
-                              <ion-col id="stamina">
+                              <ion-col id="exp">
                                 <div>
                                   <!-- // to adjust the width percentage for the character xp progress -->
                                   <div [style.width]="getPercentage(getExpLeft(_nextTarget.exp, _characters[i].charsExp[_charIndex], _characters[i].charsData[_charIndex].xp), _nextTarget.exp)"></div>
