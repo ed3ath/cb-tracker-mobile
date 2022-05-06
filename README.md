@@ -13,3 +13,12 @@ npm install -g @ionic/cli
 ```shell
 ionic serve
 ```
+
+### 3. Test it on android
+
+```shell
+npm install @capacitor/android
+ionic capacitor add android
+ionic capacitor copy android
+ionic capacitor run android
+```
