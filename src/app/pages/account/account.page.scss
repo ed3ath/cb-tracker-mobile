@@ -337,3 +337,64 @@ ion-footer{
     }
   }
 }
+
+#sword-loading{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  span{
+    margin: 20px;
+  }
+
+  #sword-loader{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+  }
+  #sword-loader2{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+    animation-delay: 0.5s;
+  }
+  #sword-loader3{
+    content: url('../../../assets/sword-loader.svg');
+    height: 20%;
+    margin-top: 50%;
+    transform: translateX(50px);
+    width: 20%;
+    animation: rotateClockwise 2s linear infinite;
+    animation-delay: 1s;
+  }
+}
+
+@keyframes rotateClockwise {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    opacity: 0.5;
+    height: 5%;
+    width: 5%;
+  }
+  50%{
+    height: 10%;
+    width: 10%;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    opacity: 1;
+    opacity: 0.5;
+    height: 5%;
+    width: 5%;
+  }
+}

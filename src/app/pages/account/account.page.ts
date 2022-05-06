@@ -18,7 +18,7 @@ export class AccountPage implements OnInit {
 
   public headerBg = '../../assets/dungeon.jpg';
   public headerTitle = 'ACCOUNTS';
-
+  isLoading = true;
 
   _chain: string;
   _currentCurrency: string;

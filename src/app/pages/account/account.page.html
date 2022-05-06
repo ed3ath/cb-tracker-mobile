@@ -1,6 +1,7 @@
 <app-header [headerTitle]="headerTitle" [subHeaderBg]="headerBg"></app-header>
 <ion-content [fullscreen]="true">
   <div id="container">
+
     <ion-grid id="accounts">
       <ion-row id="btn-account">
         <ion-col size="4">
@@ -13,7 +14,13 @@
           <button>Export</button>
         </ion-col>
       </ion-row>
-      <ion-row>
+
+      <div id="sword-loading" *ngIf="isLoading">
+        <span id="sword-loader"></span>
+        <span id="sword-loader2"></span>
+        <span id="sword-loader3"></span>
+      </div>
+      <ion-row *ngIf="!isLoading">
         <ion-col size="12">
           <ion-accordion-group *ngIf="_gasBalances && _skillAssets && _skillPrice">
             <!-- add unique identifier in the accordion value to trigger accordions separately -->
