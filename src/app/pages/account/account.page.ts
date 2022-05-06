@@ -18,7 +18,7 @@ export class AccountPage {
 
   public headerBg = '../../assets/dungeon.jpg';
   public headerTitle = 'ACCOUNTS';
-  isLoading = true;
+  isLoading = false;
 
   _chain: string;
   _currentCurrency: string;
@@ -47,8 +47,8 @@ export class AccountPage {
     this._accounts = (await this._storage.get('accounts')) || [];
     this._chain = '';
     this._currentCurrency = 'USD';
-    this.isLoading = true;
     await this.ticker();
+    this.isLoading = false;
   }
 
   closeAccordion() {
@@ -72,12 +72,12 @@ export class AccountPage {
   }
 
   async refresh(event) {
-    this.isLoading = true;
     await this.ticker();
     event.target.complete();
   }
 
   async ticker() {
+    this.isLoading = true;
     if (this._contracts._isInit) {
       if (this._chain !== 'AVAX') {
         this._repRequirements = await this._contracts.getReputationLevelRequirements();
@@ -95,6 +95,7 @@ export class AccountPage {
           async (acc) => await this._contracts.getAccountCharacters(acc)
         )
       );
+
 
       await this._contracts.skillPriceTicker();
       this._skillPrice = this._contracts._skillPrice;
@@ -117,11 +118,10 @@ export class AccountPage {
         ),
       };
       this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
+      this.isLoading = false;
     } else {
       setTimeout(async () => this.ticker, 2000);
     }
-
-    this.isLoading = false;
   }
 
   artsGenerator(character) {

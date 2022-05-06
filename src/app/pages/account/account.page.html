@@ -15,23 +15,7 @@
         </ion-col>
       </ion-row>
 
-      <div class="ion-padding custom-skeleton" *ngIf="isLoading">
-        <ion-list>
-          <ion-item *ngFor="let item of [].constructor(4); let i = index">
-            <ion-avatar slot="start">
-              <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-avatar>
-            <ion-label>
-              <h3>
-                <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-              </h3>
-              <p>
-                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-              </p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
+      <app-loader *ngIf="isLoading"></app-loader>
       <ion-row *ngIf="!isLoading">
         <ion-col size="12">
             <ion-accordion-group *ngIf="_gasBalances && _skillAssets && _skillPrice">
