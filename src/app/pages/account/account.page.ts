@@ -71,53 +71,50 @@ export class AccountPage {
   }
 
   async refresh(event) {
+    console.log('refreshing');
     await this.ticker();
     event.target.complete();
   }
 
   async ticker() {
-    if (this._contracts._isInit) {
-      if (this._chain !== 'AVAX') {
-        this._repRequirements = await this._contracts.getReputationLevelRequirements();
-      }
-      this._chain = await this._contracts.getChain();
-      this._currentCurrency = await this._contracts.getCurrency();
-      this._names = (await this._storage.get('names')) || {};
-      this._accounts = (await this._storage.get('accounts')) || [];
-      this._gasName = this._utils.getGasName(this._chain);
-
-      const skillPartnerId = await this._contracts.getSkillPartnerId();
-      const skillAssets = await this._contracts.getSkillAssets(this._accounts);
-      this._charIds = await Promise.all(
-        this._accounts.map(
-          async (acc) => await this._contracts.getAccountCharacters(acc)
-        )
-      );
-
-      await this._contracts.skillPriceTicker();
-      this._skillPrice = this._contracts._skillPrice;
-      this._gasPrice = this._contracts._gasPrice;
-      this._gasBalances = await Promise.all(
-        this._accounts.map(
-          async (acc) => await this._contracts.getGasBalance(acc)
-        )
-      );
-
-      this._multiplier = skillPartnerId
-        ? Number(await this._contracts.getMultiplier(skillPartnerId))
-        : 0;
-      this._skillAssets = {
-        staked: skillAssets.staked,
-        unclaimed: skillAssets.unclaimed,
-        wallet: skillAssets.wallet,
-        claimable: skillAssets.unclaimed.map(
-          (i) => Number(i) * this._multiplier
-        ),
-      };
-      this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
-    } else {
-      setTimeout(async () => this.ticker, 2000);
+    if (this._chain !== 'AVAX') {
+      this._repRequirements = await this._contracts.getReputationLevelRequirements();
     }
+    this._chain = await this._contracts.getChain();
+    this._currentCurrency = await this._contracts.getCurrency();
+    this._names = (await this._storage.get('names')) || {};
+    this._accounts = (await this._storage.get('accounts')) || [];
+    this._gasName = this._utils.getGasName(this._chain);
+
+    const skillPartnerId = await this._contracts.getSkillPartnerId();
+    const skillAssets = await this._contracts.getSkillAssets(this._accounts);
+    this._charIds = await Promise.all(
+      this._accounts.map(
+        async (acc) => await this._contracts.getAccountCharacters(acc)
+      )
+    );
+
+    await this._contracts.skillPriceTicker();
+    this._skillPrice = this._contracts._skillPrice;
+    this._gasPrice = this._contracts._gasPrice;
+    this._gasBalances = await Promise.all(
+      this._accounts.map(
+        async (acc) => await this._contracts.getGasBalance(acc)
+      )
+    );
+
+    this._multiplier = skillPartnerId
+      ? Number(await this._contracts.getMultiplier(skillPartnerId))
+      : 0;
+    this._skillAssets = {
+      staked: skillAssets.staked,
+      unclaimed: skillAssets.unclaimed,
+      wallet: skillAssets.wallet,
+      claimable: skillAssets.unclaimed.map(
+        (i) => Number(i) * this._multiplier
+      ),
+    };
+    this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
   }
 
   artsGenerator(character) {
