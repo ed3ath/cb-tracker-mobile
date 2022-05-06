@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "933432375866",
+    "project_id": "cbtracker-mobile",
+    "storage_bucket": "cbtracker-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933432375866:android:d52ffd941b31dd29e7d303",
+        "android_client_info": {
+          "package_name": "net.cwsdev.cbtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933432375866-q5m9aao8k2hk163a6bqnqh5g8a0tj5gr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIJu9J9zy7rmu34hpnhbykWhMirGxKpDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933432375866-q5m9aao8k2hk163a6bqnqh5g8a0tj5gr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
