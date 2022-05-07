@@ -31,8 +31,8 @@
               <ion-item slot="header" lines="none">
                 <ion-label>{{_names[_account]}}</ion-label>
                 <div>
-                  <span class="sword"></span>
-                  <button (click)="showMenu(_address, $event)"><ion-icon src="../../../assets/accounts/menu.svg"></ion-icon></button>
+                  <button (click)="showCombatSimulator(_account)"><span class="sword"></span></button>
+                  <button (click)="showMenu(_account, $event)"><ion-icon src="../../../assets/accounts/menu.svg"></ion-icon></button>
                 </div>
               </ion-item>
               <ion-list slot="content">

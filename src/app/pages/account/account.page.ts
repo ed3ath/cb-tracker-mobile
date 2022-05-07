@@ -1,12 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonAccordionGroup, ModalController, ActionSheetController } from '@ionic/angular';
+import { IonAccordionGroup, ModalController, ActionSheetController, AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { EventsService } from 'src/app/services/event.service';
 
 import { AddModalComponent } from 'src/app/modals/account/add.modal';
 import { ImportModalComponent } from 'src/app/modals/account/import.modal';
+import { RenameModalComponent } from 'src/app/modals/account/rename.modal';
 
 @Component({
   selector: 'app-account',
@@ -41,7 +43,13 @@ export class AccountPage {
     private _contracts: ContractService,
     private _utils: UtilsService,
     private _action: ActionSheetController,
-  ) {}
+    private _alert: AlertController,
+    private _events: EventsService
+  ) {
+    this._events.subscribe('accountRefresh', async () => {
+      await this.ticker();
+    });
+  }
 
   async ionViewDidEnter() {
     this._names = (await this._storage.get('names')) || {};
@@ -91,7 +99,7 @@ export class AccountPage {
     this._accounts = (await this._storage.get('accounts')) || [];
     this._gasName = this._utils.getGasName(this._chain);
 
-    const skillPartnerId = await this._contracts.getSkillPartnerId();
+    const skillPartnerId = await this._contracts.getSkillPartnerId(this._chain);
     const skillAssets = await this._contracts.getSkillAssets(this._accounts);
     this._charIds = await Promise.all(
       this._accounts.map(
@@ -99,7 +107,7 @@ export class AccountPage {
       )
     );
 
-    await this._contracts.skillPriceTicker();
+    await this._contracts.skillPriceTicker(this._chain);
     this._skillPrice = this._contracts._skillPrice;
     this._gasPrice = this._contracts._gasPrice;
     this._gasBalances = await Promise.all(
@@ -147,12 +155,18 @@ export class AccountPage {
   async showMenu(address, event) {
     event.stopPropagation();
     const actionSheet = await this._action.create({
-      cssClass: 'my-custom-class',
       buttons: [{
         text: 'Rename',
         cssClass: 'actionSheetIcon',
-        handler: () => {
-          console.log(address);
+        handler: async () => {
+          const modal = await this.modalCtrl.create({
+            component: RenameModalComponent,
+            componentProps: {
+              address,
+              name: this._names[address]
+            }
+          });
+          await modal.present();
         }
       }, {
         text: 'Combat Simulator',
@@ -169,8 +183,30 @@ export class AccountPage {
       }, {
         text: 'Delete',
         cssClass: 'actionSheetIcon',
-        handler: () => {
-          console.log(address);
+        handler: async () => {
+          const name = this._names[address];
+          const alert = await this._alert.create({
+            header: 'Delete Account Confirmation',
+            message: `Are you sure you want to delete ${name}?`,
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+              }, {
+                text: 'Yes',
+                handler: async () => {
+                  this._accounts.splice(this._accounts.indexOf(address), 1);
+                  delete this._names[address];
+                  await this._storage.set('accounts', this._accounts);
+                  await this._storage.set('names', this._names);
+                  this._utils.displayToaster(`${name} has been removed.`);
+                  await this.ticker();
+                }
+              }
+            ]
+          });
+
+          await alert.present();
         }
       }, {
         text: 'Cancel',

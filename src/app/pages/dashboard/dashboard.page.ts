@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { EventsService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +27,8 @@ export class DashboardPage {
   constructor(
     private _storage: Storage,
     private _contracts: ContractService,
-    private _utils: UtilsService
+    private _utils: UtilsService,
+    private _events: EventsService
   ) {
     this._skillPrice = this._utils.currencyFormat(0, this._currentCurrency);
     this._skillAssets = {
@@ -38,6 +41,14 @@ export class DashboardPage {
     this._characters = 0;
     this._chain = '';
     this._currentCurrency = '';
+
+    this._events.subscribe('dashboardRefresh', async (data) => {
+      this._chain = data.chain;
+      this._currentCurrency = data.currency;
+      await this._contracts.setChain(data.chain);
+      await this._contracts.setCurrency(data.currency);
+      await this.ticker();
+    });
   }
 
   async ionViewDidEnter() {
@@ -51,10 +62,11 @@ export class DashboardPage {
   }
 
   async ticker() {
-    await this._contracts.skillPriceTicker();
+    this._chain = await this._contracts.getChain();
+    await this._contracts.skillPriceTicker(this._chain);
 
     const accounts = await this._storage.get('accounts') || [];
-    const skillPartnerId = await this._contracts.getSkillPartnerId();
+    const skillPartnerId = await this._contracts.getSkillPartnerId(this._chain);
     const skillAssets = await this._contracts.getSkillAssets(accounts);
     const charIds = await Promise.all(
       accounts.map(
@@ -62,7 +74,6 @@ export class DashboardPage {
       )
     );
 
-    this._chain = await this._contracts.getChain();
     this._currentCurrency = await this._contracts.getCurrency();
     this._accounts = accounts.length;
     this._characters = this._utils.sumOfArray(charIds.map((i: []) => i.length));

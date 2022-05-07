@@ -43,6 +43,7 @@ export class ContractService {
   }
 
   async init() {
+    const chain = await this.getChain();
     this._abis = {
       cryptoblades: cryptoBladesAbi,
       skill: erc20Abi,
@@ -50,13 +51,13 @@ export class ContractService {
       multicall: multiCallAbi,
     };
 
-    const rpc = this._config.get('rpcUrls');
+    const rpc = this._config.get(chain, 'rpcUrls');
 
     this._web3 = new Web3(rpc[0]);
 
     const cryptoblades = new this._web3.eth.Contract(
       cryptoBladesAbi,
-      this._config.get('VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS')
     );
     const characters = new this._web3.eth.Contract(
       charactersAbi,
@@ -68,35 +69,41 @@ export class ContractService {
     );
     const quest = new this._web3.eth.Contract(
       questAbi,
-      this._config.get('VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS')
     );
     const skill = new this._web3.eth.Contract(
       erc20Abi,
-      this._config.get('VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS')
     );
     const treasury = new this._web3.eth.Contract(
       treasuryAbi,
-      this._config.get('VUE_APP_TREASURY_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_TREASURY_CONTRACT_ADDRESS')
     );
     const multicall = new this._web3.eth.Contract(
       multiCallAbi,
-      this._config.get('VUE_APP_MULTICALL_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_MULTICALL_CONTRACT_ADDRESS')
     );
     const staking = new this._web3.eth.Contract(
       stakingAbi,
-      this._config.get('VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
     );
     const skillStaking30 = new this._web3.eth.Contract(
       skillStaking30Abi,
-      this._config.get('VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
+      this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
     );
     const skillStaking90 = new this._web3.eth.Contract(
       skillStaking90Abi,
-      this._config.get('VUE_APP_SKILL_STAKING_REWARDS_90_CONTRACT_ADDRESS')
+      this._config.get(
+        chain,
+        'VUE_APP_SKILL_STAKING_REWARDS_90_CONTRACT_ADDRESS'
+      )
     );
     const skillStaking180 = new this._web3.eth.Contract(
       skillStaking180Abi,
-      this._config.get('VUE_APP_SKILL_STAKING_REWARDS_180_CONTRACT_ADDRESS')
+      this._config.get(
+        chain,
+        'VUE_APP_SKILL_STAKING_REWARDS_180_CONTRACT_ADDRESS'
+      )
     );
 
     this._contracts = {
@@ -125,7 +132,9 @@ export class ContractService {
 
   async setChain(chain: string) {
     if (config.supportedChains.includes(chain)) {
+      this._isInit = false;
       await this._storage.set('network', chain);
+      await this.init();
     }
   }
 
@@ -172,11 +181,10 @@ export class ContractService {
     return res;
   }
 
-  async getSkillPrice() {
-    const chain = await this.getChain();
+  async getSkillPrice(chain) {
     const contract = this.setContract(
       swapPairAbi,
-      this._config.get('SKILL_PAIR_CONTRACT_ADDRESS')
+      this._config.get(chain, 'SKILL_PAIR_CONTRACT_ADDRESS')
     );
     const reserves = await contract.methods.getReserves().call();
     if (chain === 'OEC' || chain === 'POLYGON' || chain === 'AURORA') {
@@ -185,12 +193,11 @@ export class ContractService {
     return reserves[1] / reserves[0];
   }
 
-  async getGasPrice() {
-    const chain = await this.getChain();
+  async getGasPrice(chain) {
     if (chain !== 'AURORA') {
       const contract = this.setContract(
         swapPairAbi,
-        this._config.get('TOKEN_PAIR_CONTRACT_ADDRESS')
+        this._config.get(chain, 'TOKEN_PAIR_CONTRACT_ADDRESS')
       );
       const reserves = await contract.methods.getReserves().call();
       if (chain === 'OEC') {
@@ -198,16 +205,17 @@ export class ContractService {
       }
       return reserves[1] / reserves[0];
     } else {
-      const price = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd`);
+      const price = await axios.get(
+        `https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd`
+      );
       return price.data.near.usd;
     }
   }
 
-  async skillPriceTicker() {
-    const chain = await this.getChain();
+  async skillPriceTicker(chain) {
     const currency = await this.getCurrency();
-    let skillPrice = await this.getSkillPrice();
-    let gasPrice = await this.getGasPrice();
+    let skillPrice = await this.getSkillPrice(chain);
+    let gasPrice = await this.getGasPrice(chain);
 
     if (chain === 'POLYGON') {
       gasPrice *= 1000000000000;
@@ -228,7 +236,9 @@ export class ContractService {
     }
     this._gasPrice = gasPrice;
     if (currency !== 'usd') {
-      const localPrice = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=${currency}`);
+      const localPrice = await axios.get(
+        `https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=${currency}`
+      );
       if (localPrice) {
         this._skillPrice *= localPrice.data.tether[currency];
         this._gasPrice *= localPrice.data.tether[currency];
@@ -246,7 +256,10 @@ export class ContractService {
       const accSkillStaked30 = await this.multicall(
         this.getCallData(
           skillStaking30Abi,
-          this._config.get('VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS'),
+          this._config.get(
+            chain,
+            'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS'
+          ),
           'balanceOf',
           accounts.map((acc) => [acc])
         )
@@ -257,6 +270,7 @@ export class ContractService {
           this.getCallData(
             skillStaking90Abi,
             this._config.get(
+              chain,
               'VUE_APP_SKILL_STAKING_REWARDS_90_CONTRACT_ADDRESS'
             ),
             'balanceOf',
@@ -267,6 +281,7 @@ export class ContractService {
           this.getCallData(
             skillStaking180Abi,
             this._config.get(
+              chain,
               'VUE_APP_SKILL_STAKING_REWARDS_180_CONTRACT_ADDRESS'
             ),
             'balanceOf',
@@ -287,7 +302,7 @@ export class ContractService {
       unclaimed = await this.multicall(
         this.getCallData(
           cryptoBladesAbi,
-          this._config.get('VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS'),
+          this._config.get(chain, 'VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS'),
           'getTokenRewardsFor',
           accounts.map((acc) => [acc])
         )
@@ -295,7 +310,7 @@ export class ContractService {
       wallet = await this.multicall(
         this.getCallData(
           erc20Abi,
-          this._config.get('VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS'),
+          this._config.get(chain, 'VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS'),
           'balanceOf',
           accounts.map((acc) => [acc])
         )
@@ -308,7 +323,7 @@ export class ContractService {
     };
   }
 
-  async getSkillPartnerId() {
+  async getSkillPartnerId(chain) {
     const activePartnerIds = await this.getContract('treasury')
       .methods.getActivePartnerProjectsIds()
       .call();
@@ -317,7 +332,7 @@ export class ContractService {
       await this.multicall(
         this.getCallData(
           treasuryAbi,
-          this._config.get('VUE_APP_TREASURY_CONTRACT_ADDRESS'),
+          this._config.get(chain, 'VUE_APP_TREASURY_CONTRACT_ADDRESS'),
           'partneredProjects',
           activePartnerIds.map((id) => [id])
         )
@@ -363,12 +378,18 @@ export class ContractService {
 
   async getCharacterData(charId) {
     const contract = this.getContract('characters');
-    return this._utils.characterFromContract(charId, await contract.methods.get(charId).call());
+    return this._utils.characterFromContract(
+      charId,
+      await contract.methods.get(charId).call()
+    );
   }
 
   async getWeaponData(weapId) {
     const contract = this.getContract('weapons');
-    return this._utils.weaponFromContract(weapId, await contract.methods.get(weapId).call());
+    return this._utils.weaponFromContract(
+      weapId,
+      await contract.methods.get(weapId).call()
+    );
   }
 
   async getTargets(charId, weapId) {
@@ -414,22 +435,27 @@ export class ContractService {
         charIds.map((charId) => [charId])
       )
     );
-    const charsRep = (chain !== 'AVAX' ? await this.multicall(
-      this.getCallData(
-        questAbi,
-        this._config.get('VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS'),
-        'getCharacterQuestData',
-        charIds.map(charId => [charId])
-      )
-    ) : []);
-    const charsExp = await this.getContract('cryptoblades').methods.getXpRewards(charIds).call();
+    const charsRep =
+      chain !== 'AVAX'
+        ? await this.multicall(
+            this.getCallData(
+              questAbi,
+              this._config.get(chain, 'VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS'),
+              'getCharacterQuestData',
+              charIds.map((charId) => [charId])
+            )
+          )
+        : [];
+    const charsExp = await this.getContract('cryptoblades')
+      .methods.getXpRewards(charIds)
+      .call();
 
     return {
       charsData,
       charsSta,
       charsPower,
       charsRep,
-      charsExp
+      charsExp,
     };
   }
 

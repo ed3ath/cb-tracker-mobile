@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage-angular';
 import web3Utils from 'web3-utils';
 
 import { UtilsService } from 'src/app/services/utils.service';
+import { EventsService } from 'src/app/services/event.service';
+
 @Component({
   selector: 'app-modal',
   templateUrl: './add.modal.html',
@@ -19,6 +21,7 @@ export class AddModalComponent {
     private _modalCtrl: ModalController,
     private _storage: Storage,
     private _utils: UtilsService,
+    private _events: EventsService
   ) {}
 
   async ionViewDidEnter() {
@@ -46,6 +49,7 @@ export class AddModalComponent {
         `${this._utils.addressPrivacy(this._address)} has been added.`
       );
       this._modalCtrl.dismiss();
+      this._events.publish('accountRefresh');
     }
   }
 }
