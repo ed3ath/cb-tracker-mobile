@@ -2,7 +2,15 @@
   "name": "CryptoBlades Tracker",
   "integrations": {
     "capacitor": {},
-    "cordova": {}
+    "cordova": {},
+    "enterprise": {
+      "keyId": 7064,
+      "productKey": "key_145e42f5b3b14d61adeeeb405a080bfa",
+      "appId": "787b475d",
+      "registries": [
+        "@ionic-enterprise;https://registry.ionicframework.com/"
+      ]
+    }
   },
   "type": "angular"
 }

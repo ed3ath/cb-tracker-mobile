@@ -1,6 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonAccordionGroup, ModalController, ActionSheetController, AlertController } from '@ionic/angular';
+import {
+  IonAccordionGroup,
+  ModalController,
+  ActionSheetController,
+  AlertController,
+} from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -15,7 +21,6 @@ import { RenameModalComponent } from 'src/app/modals/account/rename.modal';
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss'],
 })
-
 export class AccountPage {
   @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
 
@@ -56,8 +61,8 @@ export class AccountPage {
     this._accounts = (await this._storage.get('accounts')) || [];
     this._chain = '';
     this._currentCurrency = 'USD';
+    this.isLoading = true;
     await this.ticker();
-    this.isLoading = false;
   }
 
   closeAccordion() {
@@ -88,10 +93,9 @@ export class AccountPage {
   }
 
   async ticker() {
-    this.isLoading = true;
-
     if (this._chain !== 'AVAX') {
-      this._repRequirements = await this._contracts.getReputationLevelRequirements();
+      this._repRequirements =
+        await this._contracts.getReputationLevelRequirements();
     }
     this._chain = await this._contracts.getChain();
     this._currentCurrency = await this._contracts.getCurrency();
@@ -123,11 +127,12 @@ export class AccountPage {
       staked: skillAssets.staked,
       unclaimed: skillAssets.unclaimed,
       wallet: skillAssets.wallet,
-      claimable: skillAssets.unclaimed.map(
-        (i) => Number(i) * this._multiplier
-      ),
+      claimable: skillAssets.unclaimed.map((i) => Number(i) * this._multiplier),
     };
-    this._characters = await Promise.all(this._charIds.map((i) => this._contracts.getCharactersData(i)));
+    this._characters = await Promise.all(
+      this._charIds.map((i) => this._contracts.getCharactersData(i))
+    );
+    this.isLoading = false;
   }
 
   artsGenerator(character) {
@@ -141,7 +146,9 @@ export class AccountPage {
       return '';
     }
 
-    return `../../../assets/accounts/characters/${allImages[character % allImages.length]}`;
+    return `../../../assets/accounts/characters/${
+      allImages[character % allImages.length]
+    }`;
   }
 
   getPercentage(num1, num2) {
@@ -155,67 +162,74 @@ export class AccountPage {
   async showMenu(address, event) {
     event.stopPropagation();
     const actionSheet = await this._action.create({
-      buttons: [{
-        text: 'Rename',
-        cssClass: 'actionSheetIcon',
-        handler: async () => {
-          const modal = await this.modalCtrl.create({
-            component: RenameModalComponent,
-            componentProps: {
-              address,
-              name: this._names[address]
-            }
-          });
-          await modal.present();
-        }
-      }, {
-        text: 'Combat Simulator',
-        cssClass: 'actionSheetIcon',
-        handler: () => {
-          console.log(address);
-        }
-      }, {
-        text: 'Fight Logs',
-        cssClass: 'actionSheetIcon',
-        handler: () => {
-          console.log(address);
-        }
-      }, {
-        text: 'Delete',
-        cssClass: 'actionSheetIcon',
-        handler: async () => {
-          const name = this._names[address];
-          const alert = await this._alert.create({
-            header: 'Delete Account Confirmation',
-            message: `Are you sure you want to delete ${name}?`,
-            buttons: [
-              {
-                text: 'Cancel',
-                role: 'cancel',
-              }, {
-                text: 'Yes',
-                handler: async () => {
-                  this._accounts.splice(this._accounts.indexOf(address), 1);
-                  delete this._names[address];
-                  await this._storage.set('accounts', this._accounts);
-                  await this._storage.set('names', this._names);
-                  this._utils.displayToaster(`${name} has been removed.`);
-                  await this.ticker();
-                }
-              }
-            ]
-          });
+      buttons: [
+        {
+          text: 'Rename',
+          cssClass: 'actionSheetIcon',
+          handler: async () => {
+            const modal = await this.modalCtrl.create({
+              component: RenameModalComponent,
+              componentProps: {
+                address,
+                name: this._names[address],
+              },
+            });
+            await modal.present();
+          },
+        },
+        {
+          text: 'Combat Simulator',
+          cssClass: 'actionSheetIcon',
+          handler: () => {
+            console.log(address);
+          },
+        },
+        {
+          text: 'Fight Logs',
+          cssClass: 'actionSheetIcon',
+          handler: () => {
+            console.log(address);
+          },
+        },
+        {
+          text: 'Delete',
+          cssClass: 'actionSheetIcon',
+          handler: async () => {
+            const name = this._names[address];
+            const alert = await this._alert.create({
+              header: 'Delete Account Confirmation',
+              message: `Are you sure you want to delete ${name}?`,
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                },
+                {
+                  text: 'Yes',
+                  handler: async () => {
+                    this._accounts.splice(this._accounts.indexOf(address), 1);
+                    delete this._names[address];
+                    await this._storage.set('accounts', this._accounts);
+                    await this._storage.set('names', this._names);
+                    this._utils.displayToaster(`${name} has been removed.`);
+                    await this.ticker();
+                  },
+                },
+              ],
+            });
 
-          await alert.present();
-        }
-      }, {
-        text: 'Cancel',
-        role: 'cancel',
-        cssClass: 'actionSheetIcon',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
-      }]
+            await alert.present();
+          },
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'actionSheetIcon',
+          handler: () => {
+            console.log('Cancel clicked');
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -225,16 +239,17 @@ export class AccountPage {
       accounts: await this._storage.get('accounts'),
       names: await this._storage.get('names'),
       currency: await this._storage.get('currency'),
-      network: await this._storage.get('network')
+      network: await this._storage.get('network'),
     };
     const textToSave = JSON.stringify(a);
-    const textToSaveAsBlob = new Blob([textToSave], {
-        type: 'text/plain'
+    const savedFile = await Filesystem.writeFile({
+      path: fileName,
+      data: textToSave,
+      directory: Directory.Documents,
+      encoding: Encoding.UTF8,
     });
-
-    console.log(fileName, textToSave);
-
-}
+    console.log(savedFile);
+  }
 
   async exportData() {
     await this.getDataToFile(`CBTracker-${new Date().getTime()}.json`);

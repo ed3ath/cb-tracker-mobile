@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import IonicSecureStorageDriver from '@ionic-enterprise/secure-storage/driver';
 
 import { ConfigService } from './services/config.service';
 import { ContractService } from './services/contracts.service';
@@ -17,6 +18,8 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this._storage.defineDriver(IonicSecureStorageDriver);
+    await this._storage.setEncryptionKey('key');
     await this._storage.create();
     await this._config.init();
     await this._contract.init();
