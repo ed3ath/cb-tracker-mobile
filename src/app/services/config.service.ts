@@ -22,4 +22,9 @@ export class ConfigService {
   get(chain, key: string) {
     return this._config[chain][key];
   }
+
+  supportedChains() {
+    return config.supportedChains;
+  }
+
 }

@@ -7,8 +7,6 @@ import { StorageService } from './storage.service';
 import { ConfigService } from './config.service';
 import { UtilsService } from './utils.service';
 
-import config from '../../../app-config.json';
-
 //abis
 import cryptoBladesAbi from '../../data/abi/CryptoBlades.json';
 import charactersAbi from '../../data/abi/Characters.json';
@@ -133,7 +131,7 @@ export class ContractService {
   }
 
   async setChain(chain: string) {
-    if (config.supportedChains.includes(chain)) {
+    if (this._config.supportedChains().includes(chain)) {
       this._isInit = false;
       await this._storage.set('network', chain);
       await this.init();
