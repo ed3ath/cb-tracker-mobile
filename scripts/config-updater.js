@@ -6,7 +6,7 @@ const APPCONFIG_URL = 'https://raw.githubusercontent.com/CryptoBlades/config/mai
 async function updateAppConfig() {
   console.log('[APPCONFIG-UPDATER]', 'Updating app-config.json...');
   const appConfig = await fetch(`${APPCONFIG_URL}`).then((res) => res.json());
-  fs.writeJsonSync(`./app-config.json`, appConfig);
+  fs.writeJsonSync(`./src/data/app-config.json`, appConfig);
   console.log('[APPCONFIG-UPDATER]', 'Done updating app-config.json');
 }
 

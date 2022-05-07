@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import config from '../../../app-config.json';
-import extra from '../../../extra-config.json';
+import config from 'src/data/app-config.json';
+import extra from 'src/data/extra-config.json';
 
 @Injectable({
   providedIn: 'root',
