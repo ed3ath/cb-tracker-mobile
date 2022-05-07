@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { EventsService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-options',
@@ -19,7 +20,8 @@ export class OptionsPage {
 
   constructor(
     private _contracts: ContractService,
-    private _utils: UtilsService
+    private _utils: UtilsService,
+    private _events: EventsService
     ) {
     this._currencies = [
       'php',
@@ -51,7 +53,7 @@ export class OptionsPage {
   async saveOptions() {
     await this._contracts.setChain(this._chain);
     await this._contracts.setCurrency(this._currentCurrency);
-    this._utils.displayToaster('Changes saved.');
-
+    this._utils.displayToaster('Your changes has been saved.');
+    this._events.publish('dashboardRefresh', {chain: this._chain, currency: this._currentCurrency});
   }
 }

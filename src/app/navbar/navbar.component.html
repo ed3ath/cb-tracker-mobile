@@ -6,22 +6,12 @@
     <ion-row>
       <ion-col size="6">
         <ion-item fill="outline" part="">
-          <ion-label>USD</ion-label>
-          <ion-select [interfaceOptions]="customActionSheetOptions" interface="action-sheet">
-            <ion-select-option part="item-menu" value="10">10</ion-select-option>
-            <ion-select-option part="item-menu" value="50">50</ion-select-option>
-            <ion-select-option part="item-menu" value="100">100</ion-select-option>
-          </ion-select>
+          <ion-label (click)="navigateTo('options')">{{_chain}}</ion-label>
         </ion-item>
       </ion-col>
       <ion-col size="6">
         <ion-item fill="outline">
-          <ion-label>BNB</ion-label>
-          <ion-select [interfaceOptions]="customActionSheetOptions" interface="action-sheet">
-            <ion-select-option part="item-menu" value="10">10</ion-select-option>
-            <ion-select-option part="item-menu" value="50">50</ion-select-option>
-            <ion-select-option part="item-menu" value="100">100</ion-select-option>
-          </ion-select>
+          <ion-label (click)="navigateTo('options')">{{_currentCurrency.toUpperCase()}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>

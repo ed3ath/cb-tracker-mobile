@@ -1,54 +1,64 @@
 <app-header [headerTitle]="headerTitle" [subHeaderBg]="headerBg"></app-header>
-<ion-content>
+<ion-content  [fullscreen]="true">
   <div id="container">
     <ion-grid id="dashboard">
       <ion-row>
-        <ion-col size="6">
+        <ion-col size="12">
           <div>
-            <span>SKILL Price (USD)</span>
-            <h3>$5.17</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>HT Price</span>
-            <h3>$9.27</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Next Reset</span>
-            <h3>57ms and 47s</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Rewards Pool</span>
-            <h3>0</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Skill Multiplier</span>
-            <h3>0.00</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Hourly Fights</span>
-            <h3>0</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Hourly Power Average</span>
-            <h3>0</h3>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div>
-            <span>Hourly Total Power</span>
-            <h3>0</h3>
+            <ion-row>
+              <ion-col size="3">
+                <p id="king-icon"></p>
+              </ion-col>
+              <ion-col size="9">
+                <ion-row>
+                  <ion-col size="12">
+                    <p id="main-title">Cryptoblades Kingdom</p>
+                    <p id="sub-title">Cryptobladeskingdom.io</p>
+                  </ion-col>
+                  <ion-col size="12">
+                    <p id="king">Token: <span>$KING</span></p>
+                    <ion-row>
+                      <ion-col size="6">
+                        <div>
+                          <p id="skill-king">SKILL/KING</p>
+                          <span>0.0028</span>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div>
+                          <p id="skill-king">Multiplier</p>
+                          <span>x0.6606</span>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div>
+                          <p id="skill-king">$/Unclaimed</p>
+                          <span>$2.34</span>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div>
+                          <p id="skill-king">Distribution</p>
+                          <span>30 days</span>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-col>
+                  <ion-col size="12" id="progress-bar">
+                    <div>
+                      <span>
+                        <!-- add percentage heree -->
+                        <span style="width:30%"></span>
+                      </span>
+                      <p id="claimable">Claimed 19,283,123.94 / 20,000,000</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" id="king-description">
+                    <p id="description">KING is the native token for CryptoBlades Kingdoms, our community focused kingdom management game. Additionally, KING is the backing token for Omnus, our interactive 3D metaverse that resides within a world made up of our Land NFTs.</p>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
           </div>
         </ion-col>
       </ion-row>
