@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 import {
   ActionPerformed,
   PushNotificationSchema,
@@ -7,13 +6,15 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 
+import { StorageService } from './storage.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
   _config: any;
 
-  constructor(private _storage: Storage) {}
+  constructor(private _storage: StorageService) {}
 
   async init() {
     PushNotifications.requestPermissions().then(result => {

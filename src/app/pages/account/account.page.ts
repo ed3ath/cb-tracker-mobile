@@ -5,9 +5,9 @@ import {
   ActionSheetController,
   AlertController,
 } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
+import { StorageService } from 'src/app/services/storage.service';
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { EventsService } from 'src/app/services/event.service';
@@ -44,7 +44,7 @@ export class AccountPage {
 
   constructor(
     private modalCtrl: ModalController,
-    private _storage: Storage,
+    private _storage: StorageService,
     private _contracts: ContractService,
     private _utils: UtilsService,
     private _action: ActionSheetController,

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 
 import config from '../../../app-config.json';
 import extra from '../../../extra-config.json';
@@ -10,7 +9,7 @@ import extra from '../../../extra-config.json';
 export class ConfigService {
   _config: any;
 
-  constructor(private _storage: Storage) {}
+  constructor() {}
 
   async init() {
     const env = 'production';

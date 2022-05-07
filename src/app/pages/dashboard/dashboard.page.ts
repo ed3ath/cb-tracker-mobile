@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 
+import { StorageService } from 'src/app/services/storage.service';
 import { ContractService } from 'src/app/services/contracts.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { EventsService } from 'src/app/services/event.service';
@@ -25,7 +25,7 @@ export class DashboardPage {
   public headerTitle = 'DASHBOARD';
 
   constructor(
-    private _storage: Storage,
+    private _storage: StorageService,
     private _contracts: ContractService,
     private _utils: UtilsService,
     private _events: EventsService

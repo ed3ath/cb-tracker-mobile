@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Interface } from '@ethersproject/abi';
-import { Storage } from '@ionic/storage-angular';
 import Web3 from 'web3';
 import axios from 'axios';
 
+import { StorageService } from './storage.service';
 import { ConfigService } from './config.service';
 import { UtilsService } from './utils.service';
 
@@ -35,7 +35,7 @@ export class ContractService {
   private _abis: any;
 
   constructor(
-    private _storage: Storage,
+    private _storage: StorageService,
     private _config: ConfigService,
     private _utils: UtilsService
   ) {
@@ -43,83 +43,85 @@ export class ContractService {
   }
 
   async init() {
-    const chain = await this.getChain();
-    this._abis = {
-      cryptoblades: cryptoBladesAbi,
-      skill: erc20Abi,
-      treasury: treasuryAbi,
-      multicall: multiCallAbi,
-    };
+    if (this._storage._storage) {
+      const chain = await this.getChain();
+      this._abis = {
+        cryptoblades: cryptoBladesAbi,
+        skill: erc20Abi,
+        treasury: treasuryAbi,
+        multicall: multiCallAbi,
+      };
 
-    const rpc = this._config.get(chain, 'rpcUrls');
+      const rpc = this._config.get(chain, 'rpcUrls');
 
-    this._web3 = new Web3(rpc[0]);
+      this._web3 = new Web3(rpc[0]);
 
-    const cryptoblades = new this._web3.eth.Contract(
-      cryptoBladesAbi,
-      this._config.get(chain, 'VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS')
-    );
-    const characters = new this._web3.eth.Contract(
-      charactersAbi,
-      await cryptoblades.methods.characters().call()
-    );
-    const weapons = new this._web3.eth.Contract(
-      weaponsAbi,
-      await cryptoblades.methods.weapons().call()
-    );
-    const quest = new this._web3.eth.Contract(
-      questAbi,
-      this._config.get(chain, 'VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS')
-    );
-    const skill = new this._web3.eth.Contract(
-      erc20Abi,
-      this._config.get(chain, 'VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS')
-    );
-    const treasury = new this._web3.eth.Contract(
-      treasuryAbi,
-      this._config.get(chain, 'VUE_APP_TREASURY_CONTRACT_ADDRESS')
-    );
-    const multicall = new this._web3.eth.Contract(
-      multiCallAbi,
-      this._config.get(chain, 'VUE_APP_MULTICALL_CONTRACT_ADDRESS')
-    );
-    const staking = new this._web3.eth.Contract(
-      stakingAbi,
-      this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
-    );
-    const skillStaking30 = new this._web3.eth.Contract(
-      skillStaking30Abi,
-      this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
-    );
-    const skillStaking90 = new this._web3.eth.Contract(
-      skillStaking90Abi,
-      this._config.get(
-        chain,
-        'VUE_APP_SKILL_STAKING_REWARDS_90_CONTRACT_ADDRESS'
-      )
-    );
-    const skillStaking180 = new this._web3.eth.Contract(
-      skillStaking180Abi,
-      this._config.get(
-        chain,
-        'VUE_APP_SKILL_STAKING_REWARDS_180_CONTRACT_ADDRESS'
-      )
-    );
+      const cryptoblades = new this._web3.eth.Contract(
+        cryptoBladesAbi,
+        this._config.get(chain, 'VUE_APP_CRYPTOBLADES_CONTRACT_ADDRESS')
+      );
+      const characters = new this._web3.eth.Contract(
+        charactersAbi,
+        await cryptoblades.methods.characters().call()
+      );
+      const weapons = new this._web3.eth.Contract(
+        weaponsAbi,
+        await cryptoblades.methods.weapons().call()
+      );
+      const quest = new this._web3.eth.Contract(
+        questAbi,
+        this._config.get(chain, 'VUE_APP_SIMPLE_QUESTS_CONTRACT_ADDRESS')
+      );
+      const skill = new this._web3.eth.Contract(
+        erc20Abi,
+        this._config.get(chain, 'VUE_APP_SKILL_TOKEN_CONTRACT_ADDRESS')
+      );
+      const treasury = new this._web3.eth.Contract(
+        treasuryAbi,
+        this._config.get(chain, 'VUE_APP_TREASURY_CONTRACT_ADDRESS')
+      );
+      const multicall = new this._web3.eth.Contract(
+        multiCallAbi,
+        this._config.get(chain, 'VUE_APP_MULTICALL_CONTRACT_ADDRESS')
+      );
+      const staking = new this._web3.eth.Contract(
+        stakingAbi,
+        this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
+      );
+      const skillStaking30 = new this._web3.eth.Contract(
+        skillStaking30Abi,
+        this._config.get(chain, 'VUE_APP_SKILL2_STAKING_REWARDS_CONTRACT_ADDRESS')
+      );
+      const skillStaking90 = new this._web3.eth.Contract(
+        skillStaking90Abi,
+        this._config.get(
+          chain,
+          'VUE_APP_SKILL_STAKING_REWARDS_90_CONTRACT_ADDRESS'
+        )
+      );
+      const skillStaking180 = new this._web3.eth.Contract(
+        skillStaking180Abi,
+        this._config.get(
+          chain,
+          'VUE_APP_SKILL_STAKING_REWARDS_180_CONTRACT_ADDRESS'
+        )
+      );
 
-    this._contracts = {
-      cryptoblades,
-      characters,
-      weapons,
-      quest,
-      skill,
-      treasury,
-      multicall,
-      staking,
-      skillStaking30,
-      skillStaking90,
-      skillStaking180,
-    };
-    this._isInit = true;
+      this._contracts = {
+        cryptoblades,
+        characters,
+        weapons,
+        quest,
+        skill,
+        treasury,
+        multicall,
+        staking,
+        skillStaking30,
+        skillStaking90,
+        skillStaking180,
+      };
+      this._isInit = true;
+    }
   }
 
   setContract(abi: any, address: string) {
