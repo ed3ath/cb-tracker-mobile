@@ -229,7 +229,7 @@ export class ContractService {
       skillPrice /= 1000000;
       skillPrice *= gasPrice;
     }
-    if (chain === 'BSC') {
+    if (chain === 'BNB') {
       this._skillPrice = skillPrice * gasPrice;
     } else {
       this._skillPrice = skillPrice;
@@ -265,7 +265,7 @@ export class ContractService {
         )
       );
 
-      if (chain === 'BNB') {
+      if (chain === 'BSC') {
         const accSkillStaked90 = await this.multicall(
           this.getCallData(
             skillStaking90Abi,
