@@ -236,12 +236,16 @@ export class AccountPage {
 
   async getDataToFile(fileName) {
     const a = {
-      accounts: await this._storage.get('accounts'),
-      names: await this._storage.get('names'),
-      currency: await this._storage.get('currency'),
-      network: await this._storage.get('network'),
+      accounts: await this._storage.get('accounts') || [],
+      names: await this._storage.get('names') || [],
+      currency: await this._storage.get('currency') || 'usd',
+      network: await this._storage.get('network') || 'BNB',
     };
     const textToSave = JSON.stringify(a);
+    const permission = await Filesystem.checkPermissions();
+    if (permission.publicStorage !== 'granted') {
+      await Filesystem.requestPermissions();
+    }
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: textToSave,
@@ -249,6 +253,7 @@ export class AccountPage {
       encoding: Encoding.UTF8,
     });
     console.log(savedFile);
+    this._utils.displayToaster(`Data saved to ${savedFile.uri}.`);
   }
 
   async exportData() {
